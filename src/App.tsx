@@ -8,6 +8,7 @@ import { ProximityStream } from './components/ProximityStream';
 import { HintAdModal } from './components/HintAdModal';
 import { VictoryModal } from './components/VictoryModal';
 import { RevealAdModal } from './components/RevealAdModal';
+import { Footer } from './components/Footer';
 import type { Theme, Guess, ScoreTier, DynamicHint, SavedSession } from './types/game';
 import { calculateSemanticScore, getScoreTier } from './utils/semanticEngine';
 import { getNonRepeatingTargetWord, generateRandomHint } from './data/themeDatabase';
@@ -378,10 +379,8 @@ export default function App() {
         onPlayAgain={handlePlayAgain}
       />
 
-      {/* Footer */}
-      <footer className="w-full text-center py-4 border-t border-white/5 text-[10px] font-mono text-cred-subtle px-4">
-        ORBIT ENGINE • CRED NEO-BRUTALIST GRAVITATIONAL ARCHITECTURE
-      </footer>
+      {/* Anchored Neo-Luxury Footer */}
+      <Footer />
     </div>
   );
 }
