@@ -7,12 +7,12 @@ import { GuessInput } from './components/GuessInput';
 import { ProximityStream } from './components/ProximityStream';
 import { HintAdModal } from './components/HintAdModal';
 import { VictoryModal } from './components/VictoryModal';
-import { SurrenderModal } from './components/SurrenderModal';
+import { RevealAdModal } from './components/RevealAdModal';
 import type { Theme, Guess, ScoreTier, DynamicHint, SavedSession } from './types/game';
 import { calculateSemanticScore, getScoreTier } from './utils/semanticEngine';
 import { getNonRepeatingTargetWord, generateRandomHint } from './data/themeDatabase';
 import { soundFx } from './utils/soundEngine';
-import { Gift, ArrowLeft, RotateCcw, Flag } from 'lucide-react';
+import { Gift, ArrowLeft, RotateCcw, Lock, Unlock } from 'lucide-react';
 
 const STORAGE_KEY = 'proximity_engine_session_v1';
 
@@ -26,7 +26,7 @@ export default function App() {
 
   // Dynamic Hints & Modals
   const [isHintModalOpen, setIsHintModalOpen] = useState<boolean>(false);
-  const [isSurrenderModalOpen, setIsSurrenderModalOpen] = useState<boolean>(false);
+  const [isRevealModalOpen, setIsRevealModalOpen] = useState<boolean>(false);
   const [unlockedHintIndex, setUnlockedHintIndex] = useState<number>(0);
   const [unlockedHintsList, setUnlockedHintsList] = useState<DynamicHint[]>([]);
 
@@ -88,7 +88,6 @@ export default function App() {
   };
 
   const handleSelectTheme = (baseTheme: Theme) => {
-    // Non-repeating random target word picker from 50+ pool
     const picked = getNonRepeatingTargetWord(baseTheme.id, baseTheme.targetWord);
     
     const configuredTheme: Theme = {
@@ -154,7 +153,7 @@ export default function App() {
 
   const handleConfirmSurrender = () => {
     setIsSurrendered(true);
-    setIsSurrenderModalOpen(false);
+    setIsRevealModalOpen(false);
     localStorage.removeItem(STORAGE_KEY);
     setScreen('selector');
   };
@@ -169,6 +168,9 @@ export default function App() {
 
   const highestScore = guesses.length > 0 ? Math.max(...guesses.map((g) => g.score)) : 0;
   const latestWord = guesses.length > 0 ? guesses[guesses.length - 1].word : undefined;
+
+  // Gated Word Reveal Requirement (10 guesses minimum)
+  const isRevealUnlocked = guesses.length >= 10;
 
   return (
     <div className="min-h-screen-dvh bg-[#08080A] text-white flex flex-col justify-between selection:bg-[#00FF66] selection:text-black bg-grid-pattern relative">
@@ -214,7 +216,7 @@ export default function App() {
                 
                 {/* LEFT COLUMN */}
                 <div className="lg:col-span-5 lg:sticky lg:top-6 glass-panel p-4 sm:p-6 rounded-3xl border border-white/10 shadow-xl">
-                  {/* Gameplay Top Bar */}
+                  {/* Gameplay Top Bar Controls */}
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
                     <button
                       onClick={() => {
@@ -239,16 +241,33 @@ export default function App() {
                         <span>HINT ({unlockedHintIndex}/5)</span>
                       </button>
 
+                      {/* GATED REVEAL BUTTON (LOCKED UNTIL 10 GUESSES) */}
                       <button
+                        disabled={!isRevealUnlocked || isWon || isSurrendered}
                         onClick={() => {
+                          if (!isRevealUnlocked) return;
                           soundFx.playClick();
-                          setIsSurrenderModalOpen(true);
+                          setIsRevealModalOpen(true);
                         }}
-                        className="touch-target px-2.5 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-xs font-mono text-rose-500 hover:bg-rose-500/20 transition-all flex items-center gap-1 shrink-0"
-                        title="Reveal Word / Surrender"
+                        className={`touch-target px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+                          isRevealUnlocked && !isWon && !isSurrendered
+                            ? 'bg-rose-500/20 border border-rose-500/50 text-rose-400 hover:bg-rose-500/30 shadow-[0_0_15px_rgba(255,51,102,0.35)] animate-pulse cursor-pointer'
+                            : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-50'
+                        }`}
+                        title={
+                          isRevealUnlocked
+                            ? 'Unlock 3-Stage Reveal Ad Gate'
+                            : `Locked — Requires 10 guesses (${guesses.length}/10)`
+                        }
                       >
-                        <Flag className="w-3.5 h-3.5" />
-                        <span>REVEAL</span>
+                        {isRevealUnlocked ? (
+                          <Unlock className="w-3.5 h-3.5 text-rose-400" />
+                        ) : (
+                          <Lock className="w-3.5 h-3.5 text-cred-subtle" />
+                        )}
+                        <span>
+                          {isRevealUnlocked ? 'REVEAL' : `REVEAL (${guesses.length}/10)`}
+                        </span>
                       </button>
 
                       <button
@@ -305,14 +324,15 @@ export default function App() {
         onUnlockNextHint={handleUnlockNextHint}
       />
 
-      {/* Surrender / Reveal Modal */}
-      <SurrenderModal
-        isOpen={isSurrenderModalOpen}
-        onClose={() => setIsSurrenderModalOpen(false)}
+      {/* 3-Stage Non-Skippable Reveal Ad Modal */}
+      <RevealAdModal
+        isOpen={isRevealModalOpen}
+        onClose={() => setIsRevealModalOpen(false)}
         targetWord={activeTheme ? activeTheme.targetWord : ''}
         themeName={activeTheme ? activeTheme.name : ''}
         totalGuesses={guesses.length}
         highestScore={highestScore}
+        timeTakenSeconds={Math.max(1, Math.round(((endTime || Date.now()) - startTime) / 1000))}
         onConfirmSurrender={handleConfirmSurrender}
       />
 
