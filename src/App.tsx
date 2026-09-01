@@ -24,11 +24,12 @@ export default function App() {
   const [isSurrendered, setIsSurrendered] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
 
-  // Dynamic Hints & Modals
+  // Dynamic Hints & Cooldown
   const [isHintModalOpen, setIsHintModalOpen] = useState<boolean>(false);
   const [isRevealModalOpen, setIsRevealModalOpen] = useState<boolean>(false);
   const [unlockedHintIndex, setUnlockedHintIndex] = useState<number>(0);
   const [unlockedHintsList, setUnlockedHintsList] = useState<DynamicHint[]>([]);
+  const [lastHintGuessCount, setLastHintGuessCount] = useState<number>(0);
 
   // Timers
   const [startTime, setStartTime] = useState<number>(0);
@@ -47,6 +48,7 @@ export default function App() {
           setIsSurrendered(saved.isSurrendered || false);
           setUnlockedHintIndex(saved.unlockedHintIndex || 0);
           setUnlockedHintsList(saved.unlockedHintsList || []);
+          setLastHintGuessCount(saved.lastHintGuessCount || 0);
           setStartTime(saved.startTime || Date.now());
           setEndTime(saved.endTime || 0);
           setScreen('gameplay');
@@ -68,6 +70,7 @@ export default function App() {
           isSurrendered,
           unlockedHintIndex,
           unlockedHintsList,
+          lastHintGuessCount,
           startTime,
           endTime,
         };
@@ -78,7 +81,7 @@ export default function App() {
     } catch {
       // Ignore storage errors
     }
-  }, [activeTheme, guesses, isWon, isSurrendered, unlockedHintIndex, unlockedHintsList, startTime, endTime, screen]);
+  }, [activeTheme, guesses, isWon, isSurrendered, unlockedHintIndex, unlockedHintsList, lastHintGuessCount, startTime, endTime, screen]);
 
   const handleToggleSound = () => {
     setSoundEnabled((prev) => {
@@ -102,6 +105,7 @@ export default function App() {
     setIsSurrendered(false);
     setUnlockedHintIndex(0);
     setUnlockedHintsList([]);
+    setLastHintGuessCount(0);
     setStartTime(Date.now());
     setEndTime(0);
     setScreen('gameplay');
@@ -148,6 +152,7 @@ export default function App() {
     if (!activeTheme) return;
     const newHint = generateRandomHint(activeTheme.targetWord, activeTheme);
     setUnlockedHintsList((prev) => [...prev, newHint]);
+    setLastHintGuessCount(guesses.length);
     setUnlockedHintIndex((prev) => prev + 1);
   };
 
@@ -171,6 +176,12 @@ export default function App() {
 
   // Gated Word Reveal Requirement (10 guesses minimum)
   const isRevealUnlocked = guesses.length >= 10;
+
+  // 10-Guess Cooldown Logic between consecutive hints
+  const isFirstHint = unlockedHintIndex === 0;
+  const guessesSinceLastHint = Math.max(0, guesses.length - lastHintGuessCount);
+  const isHintUnlocked = isFirstHint || guessesSinceLastHint >= 10;
+  const guessesNeededForNextHint = Math.max(0, 10 - guessesSinceLastHint);
 
   return (
     <div className="min-h-screen-dvh bg-[#08080A] text-white flex flex-col justify-between selection:bg-[#00FF66] selection:text-black bg-grid-pattern relative">
@@ -230,15 +241,35 @@ export default function App() {
                     </button>
 
                     <div className="flex items-center gap-2">
+                      {/* HINT BUTTON WITH 10-GUESS COOLDOWN GATE */}
                       <button
+                        disabled={!isHintUnlocked || isWon || isSurrendered}
                         onClick={() => {
+                          if (!isHintUnlocked) return;
                           soundFx.playClick();
                           setIsHintModalOpen(true);
                         }}
-                        className="touch-target px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#FFB800]/15 to-[#FF3366]/15 border border-[#FFB800]/40 text-xs font-mono text-[#FFB800] hover:brightness-125 transition-all flex items-center gap-1.5 shadow-[0_0_12px_rgba(255,184,0,0.2)] active:scale-95 font-bold shrink-0"
+                        className={`touch-target px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+                          isHintUnlocked && !isWon && !isSurrendered
+                            ? 'bg-gradient-to-r from-[#FFB800]/15 to-[#FF3366]/15 border border-[#FFB800]/40 text-[#FFB800] hover:brightness-125 shadow-[0_0_12px_rgba(255,184,0,0.2)] active:scale-95 cursor-pointer'
+                            : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-60'
+                        }`}
+                        title={
+                          isHintUnlocked
+                            ? 'Unlock next cryptic hint'
+                            : `Make 10 guesses between hints to unlock more clues (${guessesSinceLastHint}/10 completed)`
+                        }
                       >
-                        <Gift className="w-4 h-4" />
-                        <span>HINT ({unlockedHintIndex}/5)</span>
+                        {isHintUnlocked ? (
+                          <Gift className="w-4 h-4 text-[#FFB800]" />
+                        ) : (
+                          <Lock className="w-3.5 h-3.5 text-cred-subtle" />
+                        )}
+                        <span>
+                          {isHintUnlocked
+                            ? `HINT (${unlockedHintIndex}/5)`
+                            : `HINT IN ${guessesNeededForNextHint}G`}
+                        </span>
                       </button>
 
                       {/* GATED REVEAL BUTTON (LOCKED UNTIL 10 GUESSES) */}

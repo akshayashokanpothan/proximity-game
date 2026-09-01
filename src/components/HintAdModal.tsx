@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Gift, Lock, X, Play, CheckCircle, Sparkles, ShieldCheck } from 'lucide-react';
+import { Gift, Lock, X, Play, CheckCircle, Sparkles, ShieldCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import { soundFx } from '../utils/soundEngine';
 import type { DynamicHint } from '../types/game';
 
@@ -22,6 +22,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
   const [adStage, setAdStage] = useState<'idle' | 'ad1' | 'ad2' | 'revealed'>('idle');
   const [countdown, setCountdown] = useState<number>(5);
   const [isScratched, setIsScratched] = useState<boolean>(false);
+  const [showHistory, setShowHistory] = useState<boolean>(false);
 
   // Reset modal state on open
   useEffect(() => {
@@ -114,6 +115,41 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
               <X className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Review Earned Clues Accordion */}
+          {unlockedHintsList.length > 0 && (
+            <div className="mb-4">
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className="w-full py-2 px-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono text-[#FFB800]"
+              >
+                <span>EARNED CLUES ({unlockedHintsList.length})</span>
+                {showHistory ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+
+              <AnimatePresence>
+                {showHistory && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden space-y-2 mt-2"
+                  >
+                    {unlockedHintsList.map((hint, idx) => (
+                      <div key={idx} className="glass-panel p-2.5 rounded-xl border border-white/10 text-left">
+                        <span className="text-[9px] font-mono text-[#00FF66] tracking-widest uppercase font-bold px-1.5 py-0.5 rounded bg-[#00FF66]/10 border border-[#00FF66]/30 inline-block mb-1">
+                          HINT #{idx + 1} • {hint.badge}
+                        </span>
+                        <p className="text-xs font-bold text-white font-sans">
+                          {hint.text}
+                        </p>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
 
           {/* Body Content by Stage */}
           {adStage === 'idle' && (

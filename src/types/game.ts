@@ -44,6 +44,7 @@ export interface SavedSession {
   isSurrendered: boolean;
   unlockedHintIndex: number;
   unlockedHintsList?: DynamicHint[];
+  lastHintGuessCount?: number;
   startTime: number;
   endTime: number;
 }
