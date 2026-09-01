@@ -70,25 +70,14 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <motion.div
-          initial={{ y: '100%', opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: '100%', opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          drag="y"
-          dragConstraints={{ top: 0, bottom: 200 }}
-          dragElastic={0.2}
-          onDragEnd={(_, info) => {
-            if (info.offset.y > 100) {
-              onClose();
-            }
-          }}
-          className="w-full max-w-md sm:max-w-lg glass-panel rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 border border-white/15 shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden max-h-[90dvh] touch-scroll"
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 320 }}
+          className="w-full max-w-lg glass-panel rounded-2xl p-5 sm:p-6 border border-white/10 bg-[#121216]/95 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden max-h-[90dvh] touch-scroll"
         >
-          {/* Mobile Drag Handle */}
-          <div className="w-12 h-1.5 bg-white/20 rounded-full mx-auto mb-3 sm:hidden" />
-
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
             <div className="flex items-center gap-2">

@@ -111,11 +111,11 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="w-full max-w-md glass-panel rounded-3xl p-6 border border-rose-500/40 text-center relative overflow-hidden shadow-[0_0_60px_rgba(255,51,102,0.25)]"
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 320 }}
+          className="w-full max-w-lg glass-panel rounded-2xl p-6 border border-rose-500/40 bg-[#121216]/95 backdrop-blur-xl text-center relative overflow-hidden shadow-[0_0_60px_rgba(255,51,102,0.25)]"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
