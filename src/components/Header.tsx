@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Sparkles, Cpu } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Disc } from 'lucide-react';
 import { soundFx } from '../utils/soundEngine';
 
 interface HeaderProps {
@@ -20,19 +20,19 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Branding & Engine Pill */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 border border-emerald-500/40 flex items-center justify-center text-[#00FF66] shadow-[0_0_15px_rgba(0,255,102,0.3)] shrink-0">
-          <Cpu className="w-5 h-5 animate-pulse" />
+          <Disc className="w-5 h-5 animate-spin" style={{ animationDuration: '8s' }} />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white font-sans">
-              PROXIMITY<span className="text-[#00FF66]">.ENGINE</span>
+            <h1 className="text-lg sm:text-xl font-extrabold tracking-widest text-white font-sans">
+              ORBIT<span className="text-[#00FF66]">.ENGINE</span>
             </h1>
             <span className="px-2 py-0.5 text-[9px] font-mono tracking-wider bg-white/5 text-[#00FF66] border border-[#00FF66]/30 rounded-full font-semibold">
               v1.0
             </span>
           </div>
-          <p className="text-[11px] sm:text-xs text-cred-muted font-sans font-medium">
-            Semantic Vector Distance Solver
+          <p className="text-[10px] sm:text-[11px] text-cred-muted font-mono font-semibold tracking-wider">
+            SEMANTIC GRAVITY // VECTOR SOLVER
           </p>
         </div>
       </div>

@@ -14,7 +14,7 @@ import { getNonRepeatingTargetWord, generateRandomHint } from './data/themeDatab
 import { soundFx } from './utils/soundEngine';
 import { Gift, ArrowLeft, RotateCcw, Lock, Unlock } from 'lucide-react';
 
-const STORAGE_KEY = 'proximity_engine_session_v1';
+const STORAGE_KEY = 'orbit_engine_session_v1';
 
 export default function App() {
   const [screen, setScreen] = useState<'selector' | 'gameplay'>('selector');
@@ -319,7 +319,7 @@ export default function App() {
                   {activeTheme && (
                     <div className="mb-3 text-center">
                       <span className="text-[10px] font-mono text-cred-subtle uppercase tracking-widest block">
-                        ACTIVE REALM
+                        ACTIVE ORBIT REALM
                       </span>
                       <h2 className="text-xl font-bold text-white tracking-tight flex items-center justify-center gap-2">
                         <span>{activeTheme.icon}</span>
@@ -380,7 +380,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="w-full text-center py-4 border-t border-white/5 text-[10px] font-mono text-cred-subtle px-4">
-        PROXIMITY ENGINE • CRED NEO-BRUTALIST ARCHITECTURE
+        ORBIT ENGINE • CRED NEO-BRUTALIST GRAVITATIONAL ARCHITECTURE
       </footer>
     </div>
   );

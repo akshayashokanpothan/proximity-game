@@ -17,13 +17,12 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
   const tier: ScoreTier = getScoreTier(score);
   const color = getTierColor(tier);
 
-  // Animated number count-up effect
   useEffect(() => {
     let start = displayScore;
     const end = score;
     if (start === end) return;
 
-    const duration = 600; // ms
+    const duration = 600;
     const startTime = performance.now();
 
     const animateCount = (now: number) => {
@@ -40,7 +39,6 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
     requestAnimationFrame(animateCount);
   }, [score]);
 
-  // SVG Radial Circle geometry
   const radius = 64;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (displayScore / 100) * circumference;
@@ -57,18 +55,18 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
 
   const getTierLabel = () => {
     switch (tier) {
-      case 'target': return 'TARGET HIT 🎯';
-      case 'extreme': return 'EXTREME HEAT 🔥';
-      case 'hot': return 'HOT & CLOSE ⚡';
-      case 'lukewarm': return 'LUKEWARM 🌤️';
-      case 'freezing': return 'FREEZING COLD ❄️';
+      case 'target': return 'TARGET CORE HIT 🎯';
+      case 'extreme': return 'GRAVITATIONAL CORE 🔥';
+      case 'hot': return 'TRAJECTORY LOCKED ⚡';
+      case 'lukewarm': return 'APPROACHING ORBIT 🌤️';
+      case 'freezing': return 'OUTER RIM ❄️';
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-4">
+    <div className="flex flex-col items-center justify-center my-4 select-none">
       {/* Dial Glass Outer Ring */}
-      <div className="relative w-44 h-44 flex items-center justify-center rounded-full glass-panel p-2 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+      <div className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center rounded-full glass-panel p-2 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
         {/* SVG Arc Progress Bar */}
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
           {/* Background Ring */}
@@ -103,11 +101,11 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
           <div className="flex items-center gap-1 mb-0.5">
             {getTierIcon()}
           </div>
-          <div className="text-4xl font-extrabold font-mono tracking-tight text-white drop-shadow-md">
+          <div className="text-4xl sm:text-5xl font-extrabold font-mono tracking-tight text-white drop-shadow-md">
             {displayScore}<span className="text-xl text-cred-muted">%</span>
           </div>
           <span
-            className="text-[10px] font-mono font-bold tracking-widest px-2 py-0.5 rounded-full mt-1 uppercase"
+            className="text-[9px] sm:text-[10px] font-mono font-bold tracking-widest px-2.5 py-0.5 rounded-full mt-1 uppercase"
             style={{
               color: color,
               backgroundColor: `${color}15`,
@@ -126,7 +124,7 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
           animate={{ opacity: 1, y: 0 }}
           className="mt-3 text-xs font-mono text-cred-muted flex items-center gap-2"
         >
-          <span>LAST GUESS:</span>
+          <span>LAST ORBIT VECTOR:</span>
           <span className="text-white font-bold uppercase tracking-wider px-2 py-0.5 bg-white/5 rounded border border-white/10">
             {latestWord}
           </span>

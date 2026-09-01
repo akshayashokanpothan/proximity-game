@@ -58,14 +58,14 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
         >
           <Sparkles className="w-4 h-4 text-[#00FF66]" />
           <span className="text-xs font-mono tracking-wider text-cred-muted uppercase font-semibold">
-            Neo-Luxury Proximity Arena
+            ORBIT GRAVITATIONAL ARENA
           </span>
         </motion.div>
         <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-sans mb-3">
-          CHOOSE YOUR <span className="text-metallic">SEMANTIC REALM</span>
+          CHOOSE YOUR <span className="text-metallic">ORBIT REALM</span>
         </h2>
         <p className="text-xs sm:text-base text-cred-muted max-w-lg mx-auto font-sans leading-relaxed">
-          Navigate the vector space of human thought. Enter any custom topic or select a curated preset domain.
+          Navigate the gravitational vector field of human thought. Enter any custom topic or select a solar domain.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           <div className="flex items-center gap-2">
             <PlusCircle className="w-4 h-4 text-[#00F0FF]" />
             <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide uppercase font-sans">
-              Custom Realm Generator (Primary Entry)
+              Custom Orbit Generator (Primary Entry)
             </h3>
           </div>
           <span className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider font-semibold">
@@ -102,24 +102,24 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
         </form>
         {isCustomMode && customInput.trim() && (
           <p className="mt-2.5 text-xs text-[#00F0FF] font-mono flex items-center gap-1.5">
-            <span>✓ Active Custom Realm:</span>
+            <span>✓ Active Custom Orbit:</span>
             <strong className="uppercase bg-[#00F0FF]/10 px-2 py-0.5 rounded border border-[#00F0FF]/30">{customInput}</strong>
           </p>
         )}
       </div>
 
-      {/* 2. SECONDARY SECTION: Curated Theme Chips (DIRECTLY BELOW CUSTOM INPUT) */}
+      {/* 2. SECONDARY SECTION: Curated Theme Chips */}
       <div className="space-y-4 mb-8">
         <div className="flex items-center justify-between px-1">
           <span className="text-xs font-mono tracking-widest text-cred-muted uppercase font-bold">
             Or Choose A Curated Preset Realm ({DEFAULT_THEMES.length})
           </span>
           <span className="text-xs font-mono text-[#00FF66]">
-            SUGGESTED DOMAINS
+            SOLAR DOMAINS
           </span>
         </div>
 
-        {/* Responsive Grid: Mobile Snap Scroll, 2-col on Tablet, 4-col on Desktop */}
+        {/* Responsive Grid */}
         <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-x-auto touch-scroll snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
           {DEFAULT_THEMES.map((theme) => {
             const isSelected = !isCustomMode && selectedThemeId === theme.id;
@@ -154,7 +154,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
                     {theme.badge}
                   </span>
                   <span className="text-[11px] font-mono text-[#00FF66] font-semibold">
-                    PLAY ➔
+                    ENTER ➔
                   </span>
                 </div>
               </motion.button>
@@ -172,7 +172,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           className="gradient-border-btn px-10 py-4 text-sm sm:text-base font-bold font-mono tracking-wider text-white shadow-2xl inline-flex items-center gap-3 active:scale-95"
         >
           <Play className="w-5 h-5 text-[#00FF66] fill-[#00FF66]" />
-          <span>INITIALIZE MATCH</span>
+          <span>ENTER ORBIT MATCH</span>
         </motion.button>
       </div>
     </div>

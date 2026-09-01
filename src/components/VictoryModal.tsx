@@ -44,19 +44,18 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
     soundFx.playClick();
     const historySnippet = guessHistoryScores.slice(-5).map(s => `${s}%`).join(' ➔ ');
     const shareText = 
-`⚡ PROXIMITY ENGINE v1.0
+`⚡ ORBIT — SEMANTIC GRAVITY v1.0
 🎯 Realm: [${themeName.toUpperCase()}]
-🏆 Target: ${targetWord.toUpperCase()}
-🔥 Solved in ${totalGuesses} tries (${formatTime(timeTakenSeconds)})
-📈 Vector Progression: ${historySnippet}
-✨ Played on Neo-Luxury Proximity Arena!`;
+🏆 Target Core: ${targetWord.toUpperCase()}
+🔥 Solved in ${totalGuesses} vector tries (${formatTime(timeTakenSeconds)})!
+📈 Gravitational Pull: ${historySnippet}
+✨ Played on ORBIT Proximity Engine!`;
 
     navigator.clipboard.writeText(shareText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
-  // Generate SVG polyline points for the proximity progression graph
   const points = guessHistoryScores.map((score, index) => {
     const x = (index / Math.max(1, guessHistoryScores.length - 1)) * 260 + 20;
     const y = 80 - (score / 100) * 60;
@@ -71,7 +70,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-          className="w-full max-w-lg glass-panel rounded-3xl p-6 sm:p-8 border border-[#00FF66]/30 shadow-[0_0_80px_rgba(0,255,102,0.25)] text-center relative overflow-hidden"
+          className="w-full max-w-lg glass-panel rounded-3xl p-6 sm:p-8 border border-[#00FF66]/30 shadow-[0_0_80px_rgba(0,255,102,0.25)] text-center relative overflow-hidden select-none"
         >
           {/* Top Decorative Banner */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00FF66] via-[#00F0FF] to-[#8B5CF6]" />
@@ -83,10 +82,10 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
 
           {/* Title Header */}
           <span className="text-xs font-mono tracking-widest text-[#00FF66] uppercase font-bold px-3 py-1 rounded-full bg-[#00FF66]/10 border border-[#00FF66]/30 inline-block mb-2">
-            VECTOR MATCH CLEARED
+            ORBIT CORE REACHED
           </span>
           <h2 className="text-3xl font-extrabold text-white tracking-tight font-sans mb-1">
-            TARGET HIT: <span className="text-[#00FF66]">{targetWord}</span>
+            TARGET CORE: <span className="text-[#00FF66]">{targetWord}</span>
           </h2>
           <p className="text-xs text-cred-muted font-sans mb-6">
             Realm: <strong className="text-white">{themeName}</strong>
@@ -97,7 +96,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
             <div className="glass-panel p-3 rounded-2xl border border-white/10 text-center">
               <Target className="w-4 h-4 text-[#00FF66] mx-auto mb-1" />
               <div className="text-lg font-extrabold font-mono text-white">{totalGuesses}</div>
-              <div className="text-[10px] font-mono text-cred-subtle uppercase">GUESSES</div>
+              <div className="text-[10px] font-mono text-cred-subtle uppercase">VECTOR GUESSES</div>
             </div>
             <div className="glass-panel p-3 rounded-2xl border border-white/10 text-center">
               <Clock className="w-4 h-4 text-[#00F0FF] mx-auto mb-1" />
@@ -107,24 +106,22 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
             <div className="glass-panel p-3 rounded-2xl border border-white/10 text-center">
               <Flame className="w-4 h-4 text-[#FF3366] mx-auto mb-1" />
               <div className="text-lg font-extrabold font-mono text-[#00FF66]">100%</div>
-              <div className="text-[10px] font-mono text-cred-subtle uppercase">MAX HEAT</div>
+              <div className="text-[10px] font-mono text-cred-subtle uppercase">GRAVITY PULL</div>
             </div>
           </div>
 
           {/* Proximity Progression SVG Chart */}
           <div className="glass-panel p-4 rounded-2xl border border-white/10 mb-6 text-left">
             <div className="flex items-center justify-between text-xs font-mono text-cred-subtle mb-2">
-              <span>PROXIMITY HEAT PROGRESSION</span>
-              <span className="text-[#00FF66]">0% ➔ 100%</span>
+              <span>GRAVITATIONAL TRAJECTORY</span>
+              <span className="text-[#00FF66]">0% ➔ 100% CORE</span>
             </div>
             <div className="w-full h-24 bg-[#0B0B0F] rounded-xl border border-white/5 relative overflow-hidden flex items-center justify-center p-2">
               <svg className="w-full h-full" viewBox="0 0 300 100" preserveAspectRatio="none">
-                {/* Grid lines */}
                 <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,0.05)" strokeDasharray="4" />
                 <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(255,255,255,0.05)" strokeDasharray="4" />
                 <line x1="0" y1="80" x2="300" y2="80" stroke="rgba(255,255,255,0.05)" strokeDasharray="4" />
                 
-                {/* Progression Polyline */}
                 {guessHistoryScores.length > 1 && (
                   <polyline
                     fill="none"
@@ -137,7 +134,6 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
                   />
                 )}
 
-                {/* Data Points */}
                 {guessHistoryScores.map((score, idx) => {
                   const x = (idx / Math.max(1, guessHistoryScores.length - 1)) * 260 + 20;
                   const y = 80 - (score / 100) * 60;
@@ -162,7 +158,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
               className="w-full py-4 rounded-xl bg-[#00FF66] text-[#08080A] font-mono text-sm font-extrabold tracking-wider shadow-[0_0_25px_rgba(0,255,102,0.4)] hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? 'CRED SHARE CARD COPIED!' : 'SHARE YOUR RUN'}</span>
+              <span>{copied ? 'ORBIT SHARE CARD COPIED!' : 'SHARE YOUR RUN'}</span>
             </button>
 
             <button
@@ -173,7 +169,7 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
               className="w-full py-3.5 rounded-xl bg-cred-card border border-white/15 text-xs font-mono font-bold text-white hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
               <RotateCcw className="w-4 h-4 text-cred-muted" />
-              <span>PLAY ANOTHER REALM</span>
+              <span>ENTER ANOTHER ORBIT</span>
             </button>
           </div>
         </motion.div>
