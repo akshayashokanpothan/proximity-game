@@ -1,113 +1,119 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Flame, Clock } from 'lucide-react';
-import type { Guess } from '../types/game';
+import { Flame, ArrowUp, Zap } from 'lucide-react';
+import type { Guess, VisualMode } from '../types/game';
 import { getTierColor } from '../utils/semanticEngine';
 
 interface ProximityCardProps {
   guess: Guess;
+  visualMode?: VisualMode;
 }
 
-export const ProximityCard: React.FC<ProximityCardProps> = ({ guess }) => {
+export const ProximityCard: React.FC<ProximityCardProps> = ({
+  guess,
+  visualMode = 'graphics',
+}) => {
   const color = getTierColor(guess.tier);
+  const isTarget = guess.tier === 'target';
+  const isMinimal = visualMode === 'minimal';
 
-  const formatTime = (ts: number) => {
-    const d = new Date(ts);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  };
+  // Minimal SaaS Light Mode Row
+  if (isMinimal) {
+    return (
+      <motion.div
+        layout
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className={`w-full p-3 rounded-xl border flex items-center justify-between transition-colors bg-white ${
+          isTarget ? 'border-neutral-900 shadow-xs' : 'border-neutral-200/80 hover:border-neutral-300'
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-xs font-bold text-neutral-400 w-6">
+            #{String(guess.rank).padStart(2, '0')}
+          </span>
+          <span className="font-mono font-bold text-sm tracking-wide text-neutral-900 uppercase">
+            {guess.word}
+          </span>
+        </div>
 
+        <div className="flex items-center gap-3">
+          {guess.rankChange && guess.rankChange > 0 ? (
+            <span className="text-[10px] font-mono font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-0.5">
+              <ArrowUp className="w-3 h-3" /> +{guess.rankChange}
+            </span>
+          ) : null}
+
+          <div className="flex items-center gap-2">
+            <div className="w-20 sm:w-28 h-2 bg-neutral-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-300"
+                style={{ width: `${guess.score}%`, backgroundColor: color }}
+              />
+            </div>
+            <span className="font-mono font-extrabold text-xs text-neutral-900 w-10 text-right">
+              {guess.score}%
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // Preserved Graphics Heavy Dark Mode Card
   return (
     <motion.div
       layout
-      layoutId={guess.id}
-      initial={{ opacity: 0, y: 12, scale: 0.98 }}
+      initial={{ opacity: 0, y: 15, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{
-        type: 'spring',
-        stiffness: 320,
-        damping: 26,
-      }}
-      className="relative glass-panel rounded-xl sm:rounded-2xl p-3.5 sm:p-4 mb-2.5 overflow-hidden border border-white/10 hover:border-white/20 transition-all shadow-md group"
+      transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+      className={`w-full p-3.5 sm:p-4 rounded-2xl glass-panel relative overflow-hidden transition-all duration-300 border ${
+        isTarget ? 'border-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.3)] bg-[#00FF66]/10' : 'hover:border-white/20'
+      }`}
     >
-      {/* Background Subtle Progress Glow */}
-      <div
-        className="absolute top-0 bottom-0 left-0 opacity-15 pointer-events-none transition-all duration-700"
-        style={{
-          width: `${guess.score}%`,
-          backgroundColor: color,
-        }}
-      />
-
-      <div className="relative flex items-center justify-between z-10 gap-3">
-        {/* Left: Rank & Word Details */}
+      <div className="flex items-center justify-between">
+        {/* Left Rank & Word */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0B0B0F] border border-white/10 flex items-center justify-center font-mono text-xs sm:text-sm font-bold text-cred-muted shrink-0 group-hover:border-white/20 transition-colors">
-            #{String(guess.rank).padStart(2, '0')}
+          <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center font-mono text-xs font-bold text-cred-subtle">
+            #{guess.rank}
           </div>
-
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-sm sm:text-base font-extrabold tracking-wider text-white uppercase">
-                {guess.word}
-              </span>
-
-              {guess.rankChange && guess.rankChange > 0 ? (
-                <span className="inline-flex items-center text-[10px] font-mono font-bold text-[#00FF66] bg-[#00FF66]/10 px-1.5 py-0.5 rounded border border-[#00FF66]/30">
-                  <TrendingUp className="w-3 h-3 mr-0.5" /> +{guess.rankChange}
-                </span>
-              ) : null}
+            <div className="text-base sm:text-lg font-bold font-mono text-white uppercase tracking-wider flex items-center gap-2">
+              <span>{guess.word}</span>
+              {isTarget && <Zap className="w-4 h-4 text-[#00FF66] animate-bounce" />}
             </div>
-
-            <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-mono text-cred-subtle mt-0.5">
-              <span className="uppercase font-semibold" style={{ color: color }}>
-                {guess.tier}
+            {guess.rankChange && guess.rankChange > 0 ? (
+              <span className="text-[10px] font-mono text-[#00FF66] flex items-center gap-0.5 font-bold">
+                <ArrowUp className="w-3 h-3" /> ▲ +{guess.rankChange} POSITIONS
               </span>
-              <span>•</span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-white/50">
-                <Clock className="w-3 h-3" /> {formatTime(guess.timestamp)}
+            ) : (
+              <span className="text-[10px] font-mono text-cred-subtle">
+                RANK POSITION #{guess.rank}
               </span>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Right: Score Metric & Heat Pill */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          <div className="text-right font-mono">
-            <div
-              className="text-base sm:text-xl font-extrabold tracking-tight drop-shadow-sm"
-              style={{ color: color }}
-            >
+        {/* Right Heat % Pill & Meter */}
+        <div className="flex flex-col items-end">
+          <div className="flex items-center gap-1.5 mb-1">
+            <Flame className="w-4 h-4" style={{ color: color }} />
+            <span className="text-lg sm:text-xl font-mono font-extrabold text-white">
               {guess.score}%
-            </div>
-            <div className="text-[9px] text-cred-subtle uppercase tracking-widest hidden sm:block">
-              HEAT SCORE
-            </div>
+            </span>
           </div>
 
-          {guess.score >= 90 && (
+          {/* Mini Linear Score Bar */}
+          <div className="w-24 sm:w-32 h-1.5 bg-white/10 rounded-full overflow-hidden">
             <div
-              className="p-1.5 sm:p-2 rounded-xl bg-white/5 border border-white/10"
-              style={{ color: color }}
-            >
-              <Flame className="w-4 h-4 animate-bounce" />
-            </div>
-          )}
+              className="h-full rounded-full transition-all duration-500"
+              style={{ width: `${guess.score}%`, backgroundColor: color }}
+            />
+          </div>
         </div>
-      </div>
-
-      {/* Dynamic Fluid Progress Bar */}
-      <div className="relative w-full h-1 bg-white/5 rounded-full mt-2.5 overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${guess.score}%` }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
-          className="h-full rounded-full"
-          style={{
-            backgroundColor: color,
-            boxShadow: `0 0 10px ${color}`,
-          }}
-        />
       </div>
     </motion.div>
   );

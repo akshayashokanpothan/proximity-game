@@ -27,6 +27,8 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [visualMode, setVisualMode] = useState<VisualMode>('graphics');
 
+  const isMinimal = visualMode === 'minimal';
+
   // Dynamic Hints & Cooldown
   const [isHintModalOpen, setIsHintModalOpen] = useState<boolean>(false);
   const [isRevealModalOpen, setIsRevealModalOpen] = useState<boolean>(false);
@@ -212,10 +214,10 @@ export default function App() {
 
   return (
     <div className={`min-h-screen-dvh flex flex-col justify-between selection:bg-[#00FF66] selection:text-black relative transition-colors duration-300 ${
-      visualMode === 'minimal' ? 'bg-[#121214] text-neutral-100' : 'bg-[#08080A] text-white bg-grid-pattern'
+      isMinimal ? 'bg-[#FBFBFC] text-neutral-900 font-sans' : 'bg-[#08080A] text-white bg-grid-pattern'
     }`}>
       {/* Background Glows (Graphics Heavy Mode Only) */}
-      {visualMode === 'graphics' && (
+      {!isMinimal && (
         <>
           <div className="fixed -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="fixed -bottom-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -241,11 +243,12 @@ export default function App() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
             >
               <ThemeSelector
                 onSelectTheme={handleSelectTheme}
                 activeTheme={activeTheme}
+                visualMode={visualMode}
               />
             </motion.div>
           ) : (
@@ -254,25 +257,29 @@ export default function App() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
               className="py-4"
             >
               {/* Dual-Experience Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
                 
                 {/* LEFT COLUMN */}
-                <div className={`lg:col-span-5 lg:sticky lg:top-6 p-4 sm:p-6 rounded-3xl border transition-colors duration-300 ${
-                  visualMode === 'minimal' ? 'bg-[#1C1C20] border-neutral-800' : 'glass-panel border-white/10 shadow-xl'
+                <div className={`lg:col-span-5 lg:sticky lg:top-6 p-4 sm:p-6 rounded-2xl border transition-colors duration-200 ${
+                  isMinimal ? 'bg-white border-neutral-200 shadow-xs' : 'glass-panel border-white/10 shadow-xl'
                 }`}>
                   {/* Gameplay Top Bar Controls */}
-                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+                  <div className={`flex items-center justify-between mb-4 pb-3 border-b ${
+                    isMinimal ? 'border-neutral-100' : 'border-white/5'
+                  }`}>
                     <button
                       onClick={() => {
                         soundFx.playClick();
                         setScreen('selector');
                       }}
-                      className={`touch-target px-3 py-2 rounded-xl border text-xs font-mono text-cred-muted hover:text-white transition-all flex items-center gap-1.5 active:scale-95 shrink-0 ${
-                        visualMode === 'minimal' ? 'bg-neutral-800 border-neutral-700' : 'bg-cred-card border-white/10'
+                      className={`touch-target px-3 py-2 rounded-xl border text-xs font-mono transition-all flex items-center gap-1.5 active:scale-95 shrink-0 ${
+                        isMinimal
+                          ? 'bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-50 shadow-xs'
+                          : 'bg-cred-card border-white/10 text-cred-muted hover:text-white'
                       }`}
                     >
                       <ArrowLeft className="w-4 h-4" />
@@ -290,10 +297,12 @@ export default function App() {
                         }}
                         className={`touch-target px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                           isHintUnlocked && !isWon && !isSurrendered
-                            ? visualMode === 'minimal'
-                              ? 'bg-amber-500/15 border border-amber-500/40 text-amber-300 hover:bg-amber-500/25 cursor-pointer'
+                            ? isMinimal
+                              ? 'bg-neutral-900 text-white hover:bg-neutral-800 shadow-xs cursor-pointer'
                               : 'bg-gradient-to-r from-[#FFB800]/15 to-[#FF3366]/15 border border-[#FFB800]/40 text-[#FFB800] hover:brightness-125 shadow-[0_0_12px_rgba(255,184,0,0.2)] active:scale-95 cursor-pointer'
-                            : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-60'
+                            : isMinimal
+                              ? 'bg-neutral-100 border border-neutral-200 text-neutral-400 cursor-not-allowed'
+                              : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-60'
                         }`}
                         title={
                           isHintUnlocked
@@ -302,7 +311,7 @@ export default function App() {
                         }
                       >
                         {isHintUnlocked ? (
-                          <Gift className="w-4 h-4 text-[#FFB800]" />
+                          <Gift className={`w-4 h-4 ${isMinimal ? 'text-white' : 'text-[#FFB800]'}`} />
                         ) : (
                           <Lock className="w-3.5 h-3.5 text-cred-subtle" />
                         )}
@@ -323,10 +332,12 @@ export default function App() {
                         }}
                         className={`touch-target px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                           isRevealUnlocked && !isWon && !isSurrendered
-                            ? visualMode === 'minimal'
-                              ? 'bg-rose-500/15 border border-rose-500/40 text-rose-400 hover:bg-rose-500/25 cursor-pointer'
+                            ? isMinimal
+                              ? 'bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 shadow-xs cursor-pointer'
                               : 'bg-rose-500/20 border border-rose-500/50 text-rose-400 hover:bg-rose-500/30 shadow-[0_0_15px_rgba(255,51,102,0.35)] animate-pulse cursor-pointer'
-                            : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-50'
+                            : isMinimal
+                              ? 'bg-neutral-100 border border-neutral-200 text-neutral-400 cursor-not-allowed'
+                              : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-50'
                         }`}
                         title={
                           isRevealUnlocked
@@ -335,7 +346,7 @@ export default function App() {
                         }
                       >
                         {isRevealUnlocked ? (
-                          <Unlock className="w-3.5 h-3.5 text-rose-400" />
+                          <Unlock className="w-3.5 h-3.5 text-rose-600" />
                         ) : (
                           <Lock className="w-3.5 h-3.5 text-cred-subtle" />
                         )}
@@ -350,8 +361,8 @@ export default function App() {
                           setGuesses([]);
                           setIsWon(false);
                         }}
-                        className={`touch-target w-10 h-10 rounded-xl border text-cred-muted hover:text-white transition-colors flex items-center justify-center shrink-0 ${
-                          visualMode === 'minimal' ? 'bg-neutral-800 border-neutral-700' : 'bg-cred-card border-white/10'
+                        className={`touch-target w-10 h-10 rounded-xl border transition-colors flex items-center justify-center shrink-0 ${
+                          isMinimal ? 'bg-white border-neutral-200 text-neutral-600 hover:text-neutral-900 shadow-xs' : 'bg-cred-card border-white/10 text-cred-muted hover:text-white'
                         }`}
                         title="Start Over"
                       >
@@ -363,10 +374,14 @@ export default function App() {
                   {/* Active Theme Info Header */}
                   {activeTheme && (
                     <div className="mb-3 text-center">
-                      <span className="text-[10px] font-mono text-cred-subtle uppercase tracking-widest block">
+                      <span className={`text-[10px] font-mono uppercase tracking-widest block ${
+                        isMinimal ? 'text-neutral-400' : 'text-cred-subtle'
+                      }`}>
                         CURRENT TOPIC
                       </span>
-                      <h2 className="text-xl font-bold text-white tracking-tight flex items-center justify-center gap-2">
+                      <h2 className={`text-xl font-bold tracking-tight flex items-center justify-center gap-2 ${
+                        isMinimal ? 'text-neutral-900' : 'text-white'
+                      }`}>
                         <span>{activeTheme.icon}</span>
                         <span>{activeTheme.name}</span>
                       </h2>
@@ -377,12 +392,12 @@ export default function App() {
                   <ProximityDial score={highestScore} latestWord={latestWord} visualMode={visualMode} />
 
                   {/* Primary Guess Input */}
-                  <GuessInput onSubmitGuess={handleSubmitGuess} disabled={isWon || isSurrendered} />
+                  <GuessInput onSubmitGuess={handleSubmitGuess} disabled={isWon || isSurrendered} visualMode={visualMode} />
                 </div>
 
                 {/* RIGHT COLUMN */}
                 <div className="lg:col-span-7">
-                  <ProximityStream guesses={guesses} />
+                  <ProximityStream guesses={guesses} visualMode={visualMode} />
                 </div>
 
               </div>
@@ -421,10 +436,11 @@ export default function App() {
         timeTakenSeconds={Math.max(1, Math.round(((endTime || Date.now()) - startTime) / 1000))}
         guessHistoryScores={guesses.map((g) => g.score)}
         onPlayAgain={handlePlayAgain}
+        visualMode={visualMode}
       />
 
       {/* Anchored Neo-Luxury Footer */}
-      <Footer />
+      <Footer visualMode={visualMode} />
     </div>
   );
 }
