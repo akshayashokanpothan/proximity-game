@@ -1,8 +1,37 @@
 import type { Theme, ScoreTier } from '../types/game';
+import { getCustomDomainTargets } from '../data/domainRegistry';
 
 export const DEFAULT_THEMES: Theme[] = [
   {
-    id: 'kitchen-alchemy',
+    id: 'engineering',
+    name: 'Engineering',
+    icon: '⚙️',
+    targetWord: 'TURBINE',
+    badge: 'MECHANICS',
+    description: 'Machines, structures, mechanics, and circuits!',
+    clues: [
+      "It has 7 letters and starts with 'T'.",
+      "A rotary mechanical device that extracts energy from fluid flow!",
+      "Key component in jet engines and power plants."
+    ],
+    preloadedWords: {
+      'TURBINE': 100,
+      'BLUEPRINT': 92,
+      'PISTON': 89,
+      'GEAR': 86,
+      'CIRCUIT': 83,
+      'TRANSISTOR': 80,
+      'CANTILEVER': 76,
+      'DYNAMO': 72,
+      'WELDING': 68,
+      'CHASSIS': 64,
+      'ENGINE': 60,
+      'MACHINE': 52,
+      'BUILD': 40
+    }
+  },
+  {
+    id: 'kitchen-cooking',
     name: 'Kitchen & Cooking',
     icon: '🍳',
     targetWord: 'WHISK',
@@ -23,25 +52,11 @@ export const DEFAULT_THEMES: Theme[] = [
       'TONGS': 79,
       'SKILLET': 76,
       'PAN': 72,
-      'OVEN': 68,
-      'COOK': 65,
-      'CHEF': 62,
-      'BOWL': 58,
-      'RECIPE': 54,
-      'BAKE': 50,
-      'KNIFE': 45,
-      'SPOON': 42,
-      'FORK': 38,
-      'PLATE': 34,
-      'APRON': 30,
-      'SAUCE': 26,
-      'FOOD': 22,
-      'WATER': 15,
-      'TABLE': 10,
+      'OVEN': 68
     }
   },
   {
-    id: 'deep-cosmos',
+    id: 'outer-space',
     name: 'Outer Space',
     icon: '🚀',
     targetWord: 'SUPERNOVA',
@@ -58,25 +73,11 @@ export const DEFAULT_THEMES: Theme[] = [
       'BLACKHOLE': 90,
       'PULSAR': 87,
       'GALAXY': 84,
-      'COSMOS': 81,
-      'STAR': 78,
-      'GRAVITY': 74,
-      'ASTEROID': 70,
-      'COMET': 66,
-      'ORBIT': 62,
-      'TELESCOPE': 58,
-      'PLANET': 52,
-      'SOLAR': 48,
-      'SPACE': 42,
-      'ASTRONAUT': 36,
-      'ROCKET': 30,
-      'SATELLITE': 26,
-      'LIGHT': 22,
-      'VOID': 15,
+      'STAR': 78
     }
   },
   {
-    id: 'speakeasy-bar',
+    id: 'drinks-bar',
     name: 'Drinks & Lounges',
     icon: '🍸',
     targetWord: 'NEGRONI',
@@ -92,26 +93,11 @@ export const DEFAULT_THEMES: Theme[] = [
       'MANHATTAN': 93,
       'CAMPARI': 91,
       'GIN': 88,
-      'VERMOUTH': 85,
-      'COCKTAIL': 82,
-      'BOURBON': 79,
-      'BITTERS': 76,
-      'SHAKER': 73,
-      'MIXOLOGY': 69,
-      'SPIRITS': 65,
-      'SPEAKEASY': 61,
-      'BAR': 56,
-      'ICE': 50,
-      'GARNISH': 44,
-      'LIQUOR': 38,
-      'GLASS': 32,
-      'WHISKEY': 28,
-      'DRINK': 22,
-      'PARTY': 15,
+      'SHAKER': 73
     }
   },
   {
-    id: 'flora-fauna',
+    id: 'animals-nature',
     name: 'Animals & Nature',
     icon: '🌿',
     targetWord: 'CHAMELEON',
@@ -126,25 +112,11 @@ export const DEFAULT_THEMES: Theme[] = [
       'CHAMELEON': 100,
       'GECKO': 92,
       'IGUANA': 89,
-      'LIZARD': 86,
-      'REPTILE': 83,
-      'CAMOUFLAGE': 80,
-      'JUNGLE': 76,
-      'FAUNA': 72,
-      'ANIMAL': 68,
-      'WILDLIFE': 63,
-      'SAFARI': 58,
-      'HABITAT': 53,
-      'NATURE': 46,
-      'GREEN': 40,
-      'FOREST': 35,
-      'LEAF': 28,
-      'PREDATOR': 22,
-      'PET': 15,
+      'LIZARD': 86
     }
   },
   {
-    id: 'cyberpunk-neon',
+    id: 'robots-tech',
     name: 'Robots & Tech',
     icon: '⚡',
     targetWord: 'NEURAL',
@@ -158,26 +130,11 @@ export const DEFAULT_THEMES: Theme[] = [
     preloadedWords: {
       'NEURAL': 100,
       'SYNAPSE': 94,
-      'CYBERWARE': 90,
-      'MATRIX': 86,
-      'INTERFACE': 82,
-      'CYBORG': 78,
-      'BIOMETRIC': 74,
-      'NETWORK': 70,
-      'AI': 66,
-      'GRID': 62,
-      'HACKER': 58,
-      'DATA': 54,
-      'NEON': 50,
-      'CODE': 44,
-      'CHIP': 38,
-      'ROBOT': 32,
-      'SIGNAL': 25,
-      'CITY': 18,
+      'CYBORG': 78
     }
   },
   {
-    id: 'arena-sports',
+    id: 'sports-games',
     name: 'Sports & Games',
     icon: '⚽',
     targetWord: 'MARATHON',
@@ -191,25 +148,11 @@ export const DEFAULT_THEMES: Theme[] = [
     preloadedWords: {
       'MARATHON': 100,
       'SPRINT': 93,
-      'TRIATHLON': 90,
-      'RUNNER': 86,
-      'ATHLETE': 82,
-      'STAMINA': 78,
-      'RACE': 74,
-      'TRACK': 70,
-      'STADIUM': 66,
-      'FINISH': 62,
-      'PACE': 58,
-      'MEDAL': 54,
-      'CHAMPION': 48,
-      'SPORTS': 42,
-      'SCORE': 36,
-      'BALL': 28,
-      'GAME': 20,
+      'TRIATHLON': 90
     }
   },
   {
-    id: 'cinema-noir',
+    id: 'movies-cinema',
     name: 'Movies & Cinema',
     icon: '🎬',
     targetWord: 'SCREENPLAY',
@@ -223,21 +166,7 @@ export const DEFAULT_THEMES: Theme[] = [
     preloadedWords: {
       'SCREENPLAY': 100,
       'SCRIPT': 94,
-      'DIRECTOR': 90,
-      'SCENARIO': 86,
-      'DIALOGUE': 82,
-      'CINEMA': 78,
-      'HOLLYWOOD': 74,
-      'FILM': 70,
-      'ACTOR': 66,
-      'CAMERA': 62,
-      'SCENE': 58,
-      'MOVIE': 54,
-      'THEATER': 48,
-      'DRAMA': 42,
-      'REEL': 35,
-      'SHOW': 26,
-      'TICKET': 18,
+      'DIRECTOR': 90
     }
   }
 ];
@@ -270,21 +199,16 @@ export function getTierBgGradient(tier: ScoreTier): string {
   }
 }
 
-/**
- * Calculates similarity score (0 to 100) between user guess and target word.
- */
 export function calculateSemanticScore(guessRaw: string, theme: Theme): number {
   const guess = guessRaw.trim().toUpperCase();
   const target = theme.targetWord.toUpperCase();
 
   if (guess === target) return 100;
 
-  // 1. Exact Preloaded Dictionary Match
   if (theme.preloadedWords && typeof theme.preloadedWords[guess] === 'number') {
     return theme.preloadedWords[guess];
   }
 
-  // 2. Multi-Factor Similarity Calculation
   let score = 0;
 
   const dist = levenshteinDistance(guess, target);
@@ -304,18 +228,17 @@ export function calculateSemanticScore(guessRaw: string, theme: Theme): number {
   const hashBonus = (hashString(guess + target) % 10);
   score += hashBonus;
 
-  const finalScore = Math.min(97, Math.max(5, Math.round(score)));
-  return finalScore;
+  return Math.min(97, Math.max(5, Math.round(score)));
 }
 
-/**
- * Generates custom theme for any user input
- */
 export function createCustomTheme(topicName: string): Theme {
   const cleanName = topicName.trim();
-  const wordsInTopic = cleanName.split(/\s+/).map(w => w.toUpperCase().replace(/[^A-Z]/g, '')).filter(Boolean);
+  const domainTargets = getCustomDomainTargets(cleanName);
   
-  const targetWord = wordsInTopic[0] || 'MAGIC';
+  // Hard Filter: Never select custom input topicName as secret word!
+  const cleanTopicUpper = cleanName.toUpperCase();
+  const filtered = domainTargets.filter(t => t.toUpperCase() !== cleanTopicUpper);
+  const targetWord = filtered[Math.floor(Math.random() * filtered.length)] || "TURBINE";
 
   return {
     id: `custom-${cleanName.toLowerCase().replace(/\s+/g, '-')}`,
@@ -326,7 +249,7 @@ export function createCustomTheme(topicName: string): Theme {
     description: `Fun secret word game about ${cleanName}!`,
     clues: [
       `The secret word has ${targetWord.length} letters and starts with '${targetWord[0]}'.`,
-      `It is related to ${cleanName}!`,
+      `A concrete domain entity related to ${cleanName}!`,
       `Ends with the letter '${targetWord[targetWord.length - 1]}'.`
     ],
     preloadedWords: {

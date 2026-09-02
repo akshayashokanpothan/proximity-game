@@ -11,7 +11,7 @@ import { RevealAdModal } from './components/RevealAdModal';
 import { Footer } from './components/Footer';
 import type { Theme, Guess, ScoreTier, DynamicHint, SavedSession, VisualMode } from './types/game';
 import { calculateSemanticScore, getScoreTier } from './utils/semanticEngine';
-import { getNonRepeatingTargetWord, generateRandomHint } from './data/themeDatabase';
+import { getGuardedTargetWord, generateRandomHint } from './data/themeDatabase';
 import { soundFx } from './utils/soundEngine';
 import { Gift, ArrowLeft, RotateCcw, Lock, Unlock } from 'lucide-react';
 
@@ -121,12 +121,13 @@ export default function App() {
   };
 
   const handleSelectTheme = async (baseTheme: Theme) => {
-    const picked = getNonRepeatingTargetWord(baseTheme.id, baseTheme.targetWord);
+    // GUARDED WORD PICKER: Ensures target word is NEVER the category/theme name itself!
+    const targetWord = getGuardedTargetWord(baseTheme.id, baseTheme.name);
     
     const configuredTheme: Theme = {
       ...baseTheme,
-      targetWord: picked.word,
-      preloadedWords: picked.entry?.associations || baseTheme.preloadedWords,
+      targetWord: targetWord,
+      preloadedWords: baseTheme.preloadedWords,
     };
 
     setActiveTheme(configuredTheme);
