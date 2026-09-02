@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Flame, ShieldAlert, Zap, Snowflake } from 'lucide-react';
 import { getScoreTier, getTierColor } from '../utils/semanticEngine';
-import type { ScoreTier } from '../types/game';
+import type { ScoreTier, VisualMode } from '../types/game';
 
 interface ProximityDialProps {
   score: number; // 0 to 100
   latestWord?: string;
+  visualMode?: VisualMode;
 }
 
 export const ProximityDial: React.FC<ProximityDialProps> = ({
   score,
   latestWord,
+  visualMode = 'graphics',
 }) => {
   const [displayScore, setDisplayScore] = useState<number>(0);
   const tier: ScoreTier = getScoreTier(score);
@@ -22,7 +24,7 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
     const end = score;
     if (start === end) return;
 
-    const duration = 600;
+    const duration = visualMode === 'minimal' ? 200 : 600;
     const startTime = performance.now();
 
     const animateCount = (now: number) => {
@@ -37,7 +39,7 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
     };
 
     requestAnimationFrame(animateCount);
-  }, [score]);
+  }, [score, visualMode]);
 
   const radius = 64;
   const circumference = 2 * Math.PI * radius;
@@ -45,8 +47,8 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
 
   const getTierIcon = () => {
     switch (tier) {
-      case 'target': return <Zap className="w-5 h-5 text-[#00FF66] animate-bounce" />;
-      case 'extreme': return <Flame className="w-5 h-5 text-[#EC4899] animate-pulse" />;
+      case 'target': return <Zap className={`w-5 h-5 text-[#00FF66] ${visualMode === 'graphics' ? 'animate-bounce' : ''}`} />;
+      case 'extreme': return <Flame className={`w-5 h-5 text-[#EC4899] ${visualMode === 'graphics' ? 'animate-pulse' : ''}`} />;
       case 'hot': return <Flame className="w-5 h-5 text-[#F97316]" />;
       case 'lukewarm': return <ShieldAlert className="w-5 h-5 text-[#F59E0B]" />;
       case 'freezing': return <Snowflake className="w-5 h-5 text-[#3B82F6]" />;
@@ -63,6 +65,42 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
     }
   };
 
+  // CALM MINIMAL MODE: Serene flat temperature bar
+  if (visualMode === 'minimal') {
+    return (
+      <div className="flex flex-col items-center justify-center my-4 select-none w-full max-w-sm mx-auto">
+        <div className="w-full bg-[#1C1C20] p-4 rounded-2xl border border-neutral-800 text-center">
+          <div className="flex items-center justify-between mb-2 font-mono text-xs">
+            <span className="flex items-center gap-1.5 text-neutral-300 font-bold">
+              {getTierIcon()}
+              <span>{getTierLabel()}</span>
+            </span>
+            <span className="text-white font-extrabold text-sm">{displayScore}%</span>
+          </div>
+
+          {/* Serene Flat Progress Bar */}
+          <div className="w-full h-3 bg-neutral-800 rounded-full overflow-hidden p-0.5 border border-neutral-700">
+            <div
+              className="h-full rounded-full transition-all duration-300 ease-out"
+              style={{
+                width: `${displayScore}%`,
+                backgroundColor: color,
+              }}
+            />
+          </div>
+
+          {latestWord && (
+            <div className="mt-3 pt-2 border-t border-neutral-800 text-[11px] font-mono text-neutral-400 flex items-center justify-between">
+              <span>LAST GUESS:</span>
+              <span className="text-white font-bold uppercase">{latestWord}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // GRAPHICS HEAVY MODE: Preserved SVG Arc Dial
   return (
     <div className="flex flex-col items-center justify-center my-4 select-none">
       {/* Dial Glass Outer Ring */}

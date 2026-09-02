@@ -9,13 +9,14 @@ import { HintAdModal } from './components/HintAdModal';
 import { VictoryModal } from './components/VictoryModal';
 import { RevealAdModal } from './components/RevealAdModal';
 import { Footer } from './components/Footer';
-import type { Theme, Guess, ScoreTier, DynamicHint, SavedSession } from './types/game';
+import type { Theme, Guess, ScoreTier, DynamicHint, SavedSession, VisualMode } from './types/game';
 import { calculateSemanticScore, getScoreTier } from './utils/semanticEngine';
 import { getNonRepeatingTargetWord, generateRandomHint } from './data/themeDatabase';
 import { soundFx } from './utils/soundEngine';
 import { Gift, ArrowLeft, RotateCcw, Lock, Unlock } from 'lucide-react';
 
 const STORAGE_KEY = 'orbit_engine_session_v1';
+const VISUAL_MODE_KEY = 'orbit_visual_mode_v1';
 
 export default function App() {
   const [screen, setScreen] = useState<'selector' | 'gameplay'>('selector');
@@ -24,6 +25,7 @@ export default function App() {
   const [isWon, setIsWon] = useState<boolean>(false);
   const [isSurrendered, setIsSurrendered] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [visualMode, setVisualMode] = useState<VisualMode>('graphics');
 
   // Dynamic Hints & Cooldown
   const [isHintModalOpen, setIsHintModalOpen] = useState<boolean>(false);
@@ -35,6 +37,18 @@ export default function App() {
   // Timers
   const [startTime, setStartTime] = useState<number>(0);
   const [endTime, setEndTime] = useState<number>(0);
+
+  // Restore visual mode from LocalStorage on mount
+  useEffect(() => {
+    try {
+      const savedMode = localStorage.getItem(VISUAL_MODE_KEY) as VisualMode;
+      if (savedMode === 'minimal' || savedMode === 'graphics') {
+        setVisualMode(savedMode);
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, []);
 
   // Restore session from LocalStorage on mount
   useEffect(() => {
@@ -88,6 +102,18 @@ export default function App() {
     setSoundEnabled((prev) => {
       soundFx.enabled = !prev;
       return !prev;
+    });
+  };
+
+  const handleToggleVisualMode = () => {
+    setVisualMode((prev) => {
+      const next = prev === 'graphics' ? 'minimal' : 'graphics';
+      try {
+        localStorage.setItem(VISUAL_MODE_KEY, next);
+      } catch {
+        // Ignore storage errors
+      }
+      return next;
     });
   };
 
@@ -185,15 +211,23 @@ export default function App() {
   const guessesNeededForNextHint = Math.max(0, 10 - guessesSinceLastHint);
 
   return (
-    <div className="min-h-screen-dvh bg-[#08080A] text-white flex flex-col justify-between selection:bg-[#00FF66] selection:text-black bg-grid-pattern relative">
-      {/* Background Glows */}
-      <div className="fixed -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed -bottom-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className={`min-h-screen-dvh flex flex-col justify-between selection:bg-[#00FF66] selection:text-black relative transition-colors duration-300 ${
+      visualMode === 'minimal' ? 'bg-[#121214] text-neutral-100' : 'bg-[#08080A] text-white bg-grid-pattern'
+    }`}>
+      {/* Background Glows (Graphics Heavy Mode Only) */}
+      {visualMode === 'graphics' && (
+        <>
+          <div className="fixed -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="fixed -bottom-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        </>
+      )}
 
       {/* Header */}
       <Header
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
+        visualMode={visualMode}
+        onToggleVisualMode={handleToggleVisualMode}
         attemptsCount={guesses.length}
         activeThemeName={activeTheme ? activeTheme.name : ''}
       />
@@ -207,7 +241,7 @@ export default function App() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.2 }}
             >
               <ThemeSelector
                 onSelectTheme={handleSelectTheme}
@@ -220,14 +254,16 @@ export default function App() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25 }}
+              transition={{ duration: 0.2 }}
               className="py-4"
             >
               {/* Dual-Experience Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
                 
                 {/* LEFT COLUMN */}
-                <div className="lg:col-span-5 lg:sticky lg:top-6 glass-panel p-4 sm:p-6 rounded-3xl border border-white/10 shadow-xl">
+                <div className={`lg:col-span-5 lg:sticky lg:top-6 p-4 sm:p-6 rounded-3xl border transition-colors duration-300 ${
+                  visualMode === 'minimal' ? 'bg-[#1C1C20] border-neutral-800' : 'glass-panel border-white/10 shadow-xl'
+                }`}>
                   {/* Gameplay Top Bar Controls */}
                   <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
                     <button
@@ -235,7 +271,9 @@ export default function App() {
                         soundFx.playClick();
                         setScreen('selector');
                       }}
-                      className="touch-target px-3 py-2 rounded-xl bg-cred-card border border-white/10 text-xs font-mono text-cred-muted hover:text-white transition-all flex items-center gap-1.5 active:scale-95 shrink-0"
+                      className={`touch-target px-3 py-2 rounded-xl border text-xs font-mono text-cred-muted hover:text-white transition-all flex items-center gap-1.5 active:scale-95 shrink-0 ${
+                        visualMode === 'minimal' ? 'bg-neutral-800 border-neutral-700' : 'bg-cred-card border-white/10'
+                      }`}
                     >
                       <ArrowLeft className="w-4 h-4" />
                       <span>TOPICS</span>
@@ -252,7 +290,9 @@ export default function App() {
                         }}
                         className={`touch-target px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                           isHintUnlocked && !isWon && !isSurrendered
-                            ? 'bg-gradient-to-r from-[#FFB800]/15 to-[#FF3366]/15 border border-[#FFB800]/40 text-[#FFB800] hover:brightness-125 shadow-[0_0_12px_rgba(255,184,0,0.2)] active:scale-95 cursor-pointer'
+                            ? visualMode === 'minimal'
+                              ? 'bg-amber-500/15 border border-amber-500/40 text-amber-300 hover:bg-amber-500/25 cursor-pointer'
+                              : 'bg-gradient-to-r from-[#FFB800]/15 to-[#FF3366]/15 border border-[#FFB800]/40 text-[#FFB800] hover:brightness-125 shadow-[0_0_12px_rgba(255,184,0,0.2)] active:scale-95 cursor-pointer'
                             : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-60'
                         }`}
                         title={
@@ -283,7 +323,9 @@ export default function App() {
                         }}
                         className={`touch-target px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all flex items-center gap-1.5 shrink-0 ${
                           isRevealUnlocked && !isWon && !isSurrendered
-                            ? 'bg-rose-500/20 border border-rose-500/50 text-rose-400 hover:bg-rose-500/30 shadow-[0_0_15px_rgba(255,51,102,0.35)] animate-pulse cursor-pointer'
+                            ? visualMode === 'minimal'
+                              ? 'bg-rose-500/15 border border-rose-500/40 text-rose-400 hover:bg-rose-500/25 cursor-pointer'
+                              : 'bg-rose-500/20 border border-rose-500/50 text-rose-400 hover:bg-rose-500/30 shadow-[0_0_15px_rgba(255,51,102,0.35)] animate-pulse cursor-pointer'
                             : 'bg-white/5 border border-white/5 text-cred-subtle cursor-not-allowed opacity-50'
                         }`}
                         title={
@@ -308,7 +350,9 @@ export default function App() {
                           setGuesses([]);
                           setIsWon(false);
                         }}
-                        className="touch-target w-10 h-10 rounded-xl bg-cred-card border border-white/10 text-cred-muted hover:text-white transition-colors flex items-center justify-center shrink-0"
+                        className={`touch-target w-10 h-10 rounded-xl border text-cred-muted hover:text-white transition-colors flex items-center justify-center shrink-0 ${
+                          visualMode === 'minimal' ? 'bg-neutral-800 border-neutral-700' : 'bg-cred-card border-white/10'
+                        }`}
                         title="Start Over"
                       >
                         <RotateCcw className="w-4 h-4" />
@@ -330,7 +374,7 @@ export default function App() {
                   )}
 
                   {/* Proximity Thermometer Centerpiece */}
-                  <ProximityDial score={highestScore} latestWord={latestWord} />
+                  <ProximityDial score={highestScore} latestWord={latestWord} visualMode={visualMode} />
 
                   {/* Primary Guess Input */}
                   <GuessInput onSubmitGuess={handleSubmitGuess} disabled={isWon || isSurrendered} />

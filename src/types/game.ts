@@ -1,5 +1,7 @@
 export type ScoreTier = 'freezing' | 'lukewarm' | 'hot' | 'extreme' | 'target';
 
+export type VisualMode = 'graphics' | 'minimal';
+
 export interface Guess {
   id: string;
   word: string;
