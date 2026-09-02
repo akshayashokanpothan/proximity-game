@@ -26,6 +26,7 @@ export default function App() {
   const [isSurrendered, setIsSurrendered] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [visualMode, setVisualMode] = useState<VisualMode>('graphics');
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const isMinimal = visualMode === 'minimal';
 
@@ -119,7 +120,7 @@ export default function App() {
     });
   };
 
-  const handleSelectTheme = (baseTheme: Theme) => {
+  const handleSelectTheme = async (baseTheme: Theme) => {
     const picked = getNonRepeatingTargetWord(baseTheme.id, baseTheme.targetWord);
     
     const configuredTheme: Theme = {
@@ -137,10 +138,26 @@ export default function App() {
     setLastHintGuessCount(0);
     setStartTime(Date.now());
     setEndTime(0);
+
+    // Call FastAPI /api/game/start endpoint
+    try {
+      const res = await fetch('/api/game/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ theme_id: baseTheme.id })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSessionId(data.session_id);
+      }
+    } catch {
+      // Fallback to local session
+    }
+
     setScreen('gameplay');
   };
 
-  const handleSubmitGuess = (wordRaw: string) => {
+  const handleSubmitGuess = async (wordRaw: string) => {
     if (!activeTheme || isWon || isSurrendered) return;
 
     const word = wordRaw.trim().toUpperCase();
@@ -149,8 +166,28 @@ export default function App() {
       return;
     }
 
-    const score = calculateSemanticScore(word, activeTheme);
-    const tier: ScoreTier = getScoreTier(score);
+    let score = calculateSemanticScore(word, activeTheme);
+    let tier: ScoreTier = getScoreTier(score);
+
+    // Try FastAPI /api/game/guess if backend session active
+    if (sessionId) {
+      try {
+        const res = await fetch('/api/game/guess', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, word: word })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.guess) {
+            score = data.guess.score;
+            tier = getScoreTier(score);
+          }
+        }
+      } catch {
+        // Fallback to local scoring
+      }
+    }
 
     const allScores = [...guesses.map((g) => g.score), score].sort((a, b) => b - a);
     const newRank = allScores.indexOf(score) + 1;
@@ -177,15 +214,49 @@ export default function App() {
     }
   };
 
-  const handleUnlockNextHint = () => {
+  const handleUnlockNextHint = async () => {
     if (!activeTheme) return;
-    const newHint = generateRandomHint(activeTheme.targetWord, activeTheme);
+
+    let newHint: DynamicHint | null = null;
+
+    if (sessionId) {
+      try {
+        const res = await fetch('/api/game/hint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, ads_watched: 2 })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          newHint = data.hint;
+        }
+      } catch {
+        // Fallback to local hint engine
+      }
+    }
+
+    if (!newHint) {
+      newHint = generateRandomHint(activeTheme.targetWord, activeTheme);
+    }
+
     setUnlockedHintsList((prev) => [...prev, newHint]);
     setLastHintGuessCount(guesses.length);
     setUnlockedHintIndex((prev) => prev + 1);
   };
 
-  const handleConfirmSurrender = () => {
+  const handleConfirmSurrender = async () => {
+    if (sessionId) {
+      try {
+        await fetch('/api/game/reveal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, ads_watched: 3 })
+        });
+      } catch {
+        // Ignore fallback
+      }
+    }
+
     setIsSurrendered(true);
     setIsRevealModalOpen(false);
     localStorage.removeItem(STORAGE_KEY);
@@ -196,6 +267,7 @@ export default function App() {
     setIsWon(false);
     setIsSurrendered(false);
     setGuesses([]);
+    setSessionId(null);
     localStorage.removeItem(STORAGE_KEY);
     setScreen('selector');
   };
