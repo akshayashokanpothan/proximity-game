@@ -238,7 +238,7 @@ export default function App() {
                       className="touch-target px-3 py-2 rounded-xl bg-cred-card border border-white/10 text-xs font-mono text-cred-muted hover:text-white transition-all flex items-center gap-1.5 active:scale-95 shrink-0"
                     >
                       <ArrowLeft className="w-4 h-4" />
-                      <span>REALMS</span>
+                      <span>TOPICS</span>
                     </button>
 
                     <div className="flex items-center gap-2">
@@ -257,8 +257,8 @@ export default function App() {
                         }`}
                         title={
                           isHintUnlocked
-                            ? 'Unlock next cryptic hint'
-                            : `Make 10 guesses between hints to unlock more clues (${guessesSinceLastHint}/10 completed)`
+                            ? 'Need a Clue? (Watch 2 quick videos)'
+                            : `Make 10 guesses first to unlock another clue! (${guessesSinceLastHint}/10 completed)`
                         }
                       >
                         {isHintUnlocked ? (
@@ -273,7 +273,7 @@ export default function App() {
                         </span>
                       </button>
 
-                      {/* GATED REVEAL BUTTON (LOCKED UNTIL 10 GUESSES) */}
+                      {/* GATED REVEAL / GIVE UP BUTTON (LOCKED UNTIL 10 GUESSES) */}
                       <button
                         disabled={!isRevealUnlocked || isWon || isSurrendered}
                         onClick={() => {
@@ -288,8 +288,8 @@ export default function App() {
                         }`}
                         title={
                           isRevealUnlocked
-                            ? 'Unlock 3-Stage Reveal Ad Gate'
-                            : `Locked — Requires 10 guesses (${guesses.length}/10)`
+                            ? 'Show Secret Word (Available after 10 guesses)'
+                            : `Show Secret Word (Available after 10 guesses — ${guesses.length}/10 completed)`
                         }
                       >
                         {isRevealUnlocked ? (
@@ -298,7 +298,7 @@ export default function App() {
                           <Lock className="w-3.5 h-3.5 text-cred-subtle" />
                         )}
                         <span>
-                          {isRevealUnlocked ? 'REVEAL' : `REVEAL (${guesses.length}/10)`}
+                          {isRevealUnlocked ? 'GIVE UP' : `GIVE UP (${guesses.length}/10)`}
                         </span>
                       </button>
 
@@ -309,7 +309,7 @@ export default function App() {
                           setIsWon(false);
                         }}
                         className="touch-target w-10 h-10 rounded-xl bg-cred-card border border-white/10 text-cred-muted hover:text-white transition-colors flex items-center justify-center shrink-0"
-                        title="Reset Guesses"
+                        title="Start Over"
                       >
                         <RotateCcw className="w-4 h-4" />
                       </button>
@@ -320,7 +320,7 @@ export default function App() {
                   {activeTheme && (
                     <div className="mb-3 text-center">
                       <span className="text-[10px] font-mono text-cred-subtle uppercase tracking-widest block">
-                        ACTIVE ORBIT REALM
+                        CURRENT TOPIC
                       </span>
                       <h2 className="text-xl font-bold text-white tracking-tight flex items-center justify-center gap-2">
                         <span>{activeTheme.icon}</span>

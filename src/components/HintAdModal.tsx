@@ -24,7 +24,6 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
   const [isScratched, setIsScratched] = useState<boolean>(false);
   const [showHistory, setShowHistory] = useState<boolean>(false);
 
-  // Reset modal state on open
   useEffect(() => {
     if (isOpen) {
       setAdStage('idle');
@@ -33,7 +32,6 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
     }
   }, [isOpen]);
 
-  // Stage 1 & 2 countdown timer logic
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (adStage === 'ad1') {
@@ -76,7 +74,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
           transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-          className="w-full max-w-lg glass-panel rounded-2xl p-5 sm:p-6 border border-white/10 bg-[#121216]/95 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden max-h-[90dvh] touch-scroll"
+          className="w-full max-w-lg glass-panel rounded-2xl p-5 sm:p-6 border border-white/10 bg-[#121216]/95 backdrop-blur-xl shadow-[0_0_60px_rgba(0,0,0,0.9)] overflow-hidden max-h-[90dvh] touch-scroll select-none"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
@@ -86,10 +84,10 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
               </div>
               <div>
                 <h3 className="font-bold text-white text-sm sm:text-base tracking-tight font-sans">
-                  CRED HINT VAULT
+                  HELPER CLUE VAULT
                 </h3>
-                <span className="text-[9px] font-mono text-cred-subtle">
-                  SPONSOR REWARD GATE
+                <span className="text-[9px] font-mono text-cred-subtle uppercase">
+                  GET A FUN HINT
                 </span>
               </div>
             </div>
@@ -112,7 +110,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                 onClick={() => setShowHistory(!showHistory)}
                 className="w-full py-2 px-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-xs font-mono text-[#FFB800]"
               >
-                <span>EARNED CLUES ({unlockedHintsList.length})</span>
+                <span>YOUR EARNED CLUES ({unlockedHintsList.length})</span>
                 {showHistory ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
 
@@ -127,7 +125,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                     {unlockedHintsList.map((hint, idx) => (
                       <div key={idx} className="glass-panel p-2.5 rounded-xl border border-white/10 text-left">
                         <span className="text-[9px] font-mono text-[#00FF66] tracking-widest uppercase font-bold px-1.5 py-0.5 rounded bg-[#00FF66]/10 border border-[#00FF66]/30 inline-block mb-1">
-                          HINT #{idx + 1} • {hint.badge}
+                          CLUE #{idx + 1} • {hint.badge}
                         </span>
                         <p className="text-xs font-bold text-white font-sans">
                           {hint.text}
@@ -147,10 +145,10 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                 <Lock className="w-7 h-7" />
               </div>
               <h4 className="text-base sm:text-lg font-bold text-white mb-1.5 uppercase tracking-wide">
-                UNLOCK CRYPTIC HINT #{unlockedHintIndex + 1}
+                UNLOCK CLUE #{unlockedHintIndex + 1}
               </h4>
               <p className="text-xs text-cred-muted max-w-xs mx-auto mb-5 leading-relaxed">
-                Watch two 5-second brand reward clips to unlock a randomized archetype clue.
+                Watch two quick 5-second helper videos to unlock your next clue!
               </p>
 
               <button
@@ -158,7 +156,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                 className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#FFB800] to-[#FF3366] text-black font-mono text-xs sm:text-sm font-extrabold tracking-wider shadow-[0_0_20px_rgba(255,184,0,0.4)] active:scale-95 transition-all flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <Play className="w-4 h-4 fill-black" />
-                <span>START REWARD GATE (0/2 WATCHED)</span>
+                <span>WATCH 2 QUICK VIDEOS (0/2 WATCHED)</span>
               </button>
             </div>
           )}
@@ -169,19 +167,17 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
               <div className="glass-panel p-4 rounded-2xl border border-white/15 mb-4 relative overflow-hidden">
                 <div className="flex items-center justify-between text-[11px] font-mono text-cred-subtle mb-2">
                   <span className="flex items-center gap-1 text-[#00FF66]">
-                    <ShieldCheck className="w-3.5 h-3.5" /> VERIFIED SPONSOR
+                    <ShieldCheck className="w-3.5 h-3.5" /> HELPER VIDEO
                   </span>
-                  <span>STAGE {adStage === 'ad1' ? '1' : '2'} / 2</span>
+                  <span>VIDEO {adStage === 'ad1' ? '1' : '2'} / 2</span>
                 </div>
 
                 <div className="my-3">
                   <div className="text-xl sm:text-2xl font-extrabold text-white tracking-widest font-mono">
-                    {adStage === 'ad1' ? '⚡ CRED MAX REWARDS' : '💎 NEXUS SYNAPSE AI'}
+                    {adStage === 'ad1' ? '⚡ HELPER VIDEO 1' : '💎 HELPER VIDEO 2'}
                   </div>
                   <p className="text-[11px] text-cred-muted mt-1">
-                    {adStage === 'ad1'
-                      ? 'Upgrade your vector proximity experience with zero fees.'
-                      : 'High-speed cognitive embeddings for modern word solvers.'}
+                    Here comes a quick helper video! Your clue unlocks in a few seconds.
                   </p>
                 </div>
 
@@ -215,7 +211,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                 </div>
 
                 <span className="text-[10px] font-mono text-cred-subtle">
-                  AD AUTOMATICALLY PROGRESSES IN {countdown} SECONDS...
+                  VIDEO MOVES FORWARD IN {countdown} SECONDS...
                 </span>
               </div>
             </div>
@@ -224,7 +220,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
           {adStage === 'revealed' && (
             <div className="py-3 text-center">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00FF66]/10 border border-[#00FF66]/30 text-[#00FF66] text-xs font-mono font-bold mb-3">
-                <CheckCircle className="w-3.5 h-3.5" /> REWARD GATE CLEARED
+                <CheckCircle className="w-3.5 h-3.5" /> CLUE READY!
               </div>
 
               {/* Shimmer Scratch Card Reveal Container */}
@@ -239,10 +235,10 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                   >
                     <Sparkles className="w-7 h-7 text-[#FFB800] mb-1.5 animate-bounce" />
                     <span className="font-mono text-xs font-bold text-white tracking-widest uppercase">
-                      TAP TO UNVEIL CLUE
+                      TAP TO SEE YOUR CLUE
                     </span>
                     <span className="text-[9px] font-mono text-cred-subtle mt-0.5">
-                      SCRATCH SHIMMER CARD
+                      SCRATCH TO REVEAL
                     </span>
                   </div>
                 ) : (
@@ -270,7 +266,7 @@ export const HintAdModal: React.FC<HintAdModalProps> = ({
                 }}
                 className="w-full py-3.5 rounded-xl bg-cred-card border border-white/15 text-xs font-mono font-bold text-white active:scale-95 transition-all min-h-[44px]"
               >
-                RETURN TO MATCH
+                BACK TO GAME
               </button>
             </div>
           )}

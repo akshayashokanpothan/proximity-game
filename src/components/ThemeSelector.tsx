@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Play, PlusCircle, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Play, PlusCircle, CheckCircle2, HelpCircle } from 'lucide-react';
 import type { Theme } from '../types/game';
 import { DEFAULT_THEMES, createCustomTheme } from '../utils/semanticEngine';
 import { soundFx } from '../utils/soundEngine';
@@ -50,23 +50,54 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   return (
     <div className="w-full max-w-7xl mx-auto px-4 lg:px-8 py-6 sm:py-10">
       {/* Hero Welcome Header */}
-      <div className="text-center mb-8 sm:mb-10">
+      <div className="text-center mb-6 sm:mb-8">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cred-card border border-white/10 mb-4 shadow-[0_0_20px_rgba(0,255,102,0.15)]"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cred-card border border-white/10 mb-3 shadow-[0_0_20px_rgba(0,255,102,0.15)]"
         >
           <Sparkles className="w-4 h-4 text-[#00FF66]" />
           <span className="text-xs font-mono tracking-wider text-cred-muted uppercase font-semibold">
-            ORBIT GRAVITATIONAL ARENA
+            FUN SECRET WORD FINDER
           </span>
         </motion.div>
-        <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-sans mb-3">
-          CHOOSE YOUR <span className="text-metallic">ORBIT REALM</span>
+        <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-sans mb-2">
+          CAN YOU FIND THE <span className="text-metallic">SECRET WORD?</span>
         </h2>
         <p className="text-xs sm:text-base text-cred-muted max-w-lg mx-auto font-sans leading-relaxed">
-          Navigate the gravitational vector field of human thought. Enter any custom topic or select a solar domain.
+          Type words to see how close you are. The warmer you get, the closer you are!
         </p>
+      </div>
+
+      {/* CUTE 3-STEP EASY INSTRUCTION BANNER */}
+      <div className="glass-panel p-4 sm:p-5 rounded-2xl mb-8 max-w-3xl mx-auto border border-[#00FF66]/20 bg-[#0E1310]/80">
+        <div className="flex items-center gap-2 mb-3 text-[#00FF66] font-mono text-xs font-bold uppercase tracking-wider">
+          <HelpCircle className="w-4 h-4" />
+          <span>HOW TO PLAY IN 3 EASY STEPS:</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+          <div className="glass-panel p-3 rounded-xl border border-white/10 flex items-start gap-2.5">
+            <span className="text-xl">🎨</span>
+            <div>
+              <h4 className="text-xs font-bold text-white mb-0.5">1. Pick a Topic</h4>
+              <p className="text-[11px] text-cred-muted leading-tight">Choose animals, kitchen, or type your own topic!</p>
+            </div>
+          </div>
+          <div className="glass-panel p-3 rounded-xl border border-white/10 flex items-start gap-2.5">
+            <span className="text-xl">🌡️</span>
+            <div>
+              <h4 className="text-xs font-bold text-white mb-0.5">2. Check Temperature</h4>
+              <p className="text-[11px] text-cred-muted leading-tight">Guesses show if you are 🥶 Cold or 🔥 Super Hot!</p>
+            </div>
+          </div>
+          <div className="glass-panel p-3 rounded-xl border border-white/10 flex items-start gap-2.5">
+            <span className="text-xl">🎯</span>
+            <div>
+              <h4 className="text-xs font-bold text-white mb-0.5">3. Find Secret Word</h4>
+              <p className="text-[11px] text-cred-muted leading-tight">Keep guessing until you hit 100% to win!</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 1. PRIMARY ENTRY POINT: Custom Theme Input Field (AT THE TOP) */}
@@ -75,11 +106,11 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           <div className="flex items-center gap-2">
             <PlusCircle className="w-4 h-4 text-[#00F0FF]" />
             <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide uppercase font-sans">
-              Custom Orbit Generator (Primary Entry)
+              Type Any Topic You Like!
             </h3>
           </div>
           <span className="text-[10px] font-mono text-[#00F0FF] uppercase tracking-wider font-semibold">
-            TYPE ANY TOPIC
+            YOUR OWN TOPIC
           </span>
         </div>
         <form onSubmit={handleCustomInputSubmit} className="flex gap-3">
@@ -90,19 +121,19 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               setCustomInput(e.target.value);
               if (!isCustomMode) setIsCustomMode(true);
             }}
-            placeholder="e.g. Cyberpunk City, 90s Cartoons, Quantum Physics..."
+            placeholder="Type anything like Dinosaurs, Toys, Cartoons..."
             className="flex-1 bg-[#0B0B0F] border border-white/15 focus:border-[#00F0FF] focus:ring-1 focus:ring-[#00F0FF] rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-cred-subtle outline-none transition-all font-sans min-h-[44px]"
           />
           <button
             type="submit"
             className="touch-target px-5 py-3 rounded-xl bg-[#00F0FF]/15 border border-[#00F0FF]/40 text-xs font-mono font-bold text-[#00F0FF] hover:bg-[#00F0FF]/25 active:scale-95 transition-all flex items-center justify-center shrink-0"
           >
-            SET REALM
+            SET TOPIC
           </button>
         </form>
         {isCustomMode && customInput.trim() && (
           <p className="mt-2.5 text-xs text-[#00F0FF] font-mono flex items-center gap-1.5">
-            <span>✓ Active Custom Orbit:</span>
+            <span>✓ Ready to Play:</span>
             <strong className="uppercase bg-[#00F0FF]/10 px-2 py-0.5 rounded border border-[#00F0FF]/30">{customInput}</strong>
           </p>
         )}
@@ -112,10 +143,10 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
       <div className="space-y-4 mb-8">
         <div className="flex items-center justify-between px-1">
           <span className="text-xs font-mono tracking-widest text-cred-muted uppercase font-bold">
-            Or Choose A Curated Preset Realm ({DEFAULT_THEMES.length})
+            Or Choose A Fun Preset Topic ({DEFAULT_THEMES.length})
           </span>
           <span className="text-xs font-mono text-[#00FF66]">
-            SOLAR DOMAINS
+            FUN TOPICS
           </span>
         </div>
 
@@ -154,7 +185,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
                     {theme.badge}
                   </span>
                   <span className="text-[11px] font-mono text-[#00FF66] font-semibold">
-                    ENTER ➔
+                    PLAY THIS ➔
                   </span>
                 </div>
               </motion.button>
@@ -172,7 +203,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           className="gradient-border-btn px-10 py-4 text-sm sm:text-base font-bold font-mono tracking-wider text-white shadow-2xl inline-flex items-center gap-3 active:scale-95"
         >
           <Play className="w-5 h-5 text-[#00FF66] fill-[#00FF66]" />
-          <span>ENTER ORBIT MATCH</span>
+          <span>START GAME!</span>
         </motion.button>
       </div>
     </div>

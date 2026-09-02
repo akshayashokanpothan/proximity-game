@@ -31,7 +31,6 @@ export const GuessInput: React.FC<GuessInputProps> = ({
   };
 
   const handleFocus = () => {
-    // Scroll input smoothly into view when mobile virtual keyboard opens
     setTimeout(() => {
       inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 300);
@@ -50,7 +49,7 @@ export const GuessInput: React.FC<GuessInputProps> = ({
           onChange={(e) => setInputValue(e.target.value)}
           onFocus={handleFocus}
           disabled={disabled}
-          placeholder="TYPE A WORD (e.g. WHISK, STAR)..."
+          placeholder="TYPE YOUR GUESS HERE..."
           className="w-full bg-transparent px-3 py-3 text-sm sm:text-base font-mono tracking-wider font-bold text-white placeholder-cred-subtle outline-none uppercase min-h-[44px]"
         />
 
@@ -64,7 +63,7 @@ export const GuessInput: React.FC<GuessInputProps> = ({
               : 'bg-white/5 text-cred-subtle cursor-not-allowed border border-white/5'
           }`}
         >
-          <span>SUBMIT</span>
+          <span>GUESS!</span>
           <Send className="w-3.5 h-3.5" />
         </motion.button>
       </div>

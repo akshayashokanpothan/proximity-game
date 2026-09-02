@@ -55,11 +55,11 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
 
   const getTierLabel = () => {
     switch (tier) {
-      case 'target': return 'TARGET CORE HIT 🎯';
-      case 'extreme': return 'GRAVITATIONAL CORE 🔥';
-      case 'hot': return 'TRAJECTORY LOCKED ⚡';
-      case 'lukewarm': return 'APPROACHING ORBIT 🌤️';
-      case 'freezing': return 'OUTER RIM ❄️';
+      case 'target': return 'YOU FOUND IT! 🎉';
+      case 'extreme': return 'ALMOST BURNING! 🌋';
+      case 'hot': return 'SUPER HOT! 🔥';
+      case 'lukewarm': return 'GETTING WARM ⛅';
+      case 'freezing': return 'FREEZING COLD 🥶';
     }
   };
 
@@ -124,7 +124,7 @@ export const ProximityDial: React.FC<ProximityDialProps> = ({
           animate={{ opacity: 1, y: 0 }}
           className="mt-3 text-xs font-mono text-cred-muted flex items-center gap-2"
         >
-          <span>LAST ORBIT VECTOR:</span>
+          <span>YOUR LAST GUESS:</span>
           <span className="text-white font-bold uppercase tracking-wider px-2 py-0.5 bg-white/5 rounded border border-white/10">
             {latestWord}
           </span>

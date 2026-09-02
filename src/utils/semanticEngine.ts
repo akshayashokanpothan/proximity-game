@@ -3,15 +3,15 @@ import type { Theme, ScoreTier } from '../types/game';
 export const DEFAULT_THEMES: Theme[] = [
   {
     id: 'kitchen-alchemy',
-    name: 'Kitchen Alchemy',
+    name: 'Kitchen & Cooking',
     icon: '🍳',
     targetWord: 'WHISK',
-    badge: 'CUISINE',
-    description: 'Culinary tools, cooking techniques, and kitchen magic',
+    badge: 'KITCHEN',
+    description: 'Yummy food, cooking tools, and kitchen fun!',
     clues: [
       "It has 5 letters and starts with 'W'.",
-      "Essential tool used for beating eggs, whipping cream, and blending batters.",
-      "Consists of a looped wire handle designed to incorporate air into liquids."
+      "Tool used to mix eggs and whip cream fast!",
+      "It has wire loops to spin air into batter."
     ],
     preloadedWords: {
       'WHISK': 100,
@@ -42,15 +42,15 @@ export const DEFAULT_THEMES: Theme[] = [
   },
   {
     id: 'deep-cosmos',
-    name: 'Deep Cosmos',
+    name: 'Outer Space',
     icon: '🚀',
     targetWord: 'SUPERNOVA',
-    badge: 'ASTRONOMY',
-    description: 'Stellar phenomena, intergalactic bodies, and space exploration',
+    badge: 'SPACE',
+    description: 'Rockets, shiny stars, and floating in space!',
     clues: [
       "It has 9 letters and starts with 'S'.",
-      "A colossal, luminous explosion marking the end of a massive star's life cycle.",
-      "Triggers the creation of heavy elements and leaves behind neutron stars or black holes."
+      "A gigantic giant star exploding in deep space!",
+      "Leaves behind neutron stars and black holes."
     ],
     preloadedWords: {
       'SUPERNOVA': 100,
@@ -77,15 +77,15 @@ export const DEFAULT_THEMES: Theme[] = [
   },
   {
     id: 'speakeasy-bar',
-    name: 'Speakeasy Bar',
+    name: 'Drinks & Lounges',
     icon: '🍸',
     targetWord: 'NEGRONI',
-    badge: 'MIXOLOGY',
-    description: 'Classic cocktails, fine spirits, and secret lounges',
+    badge: 'DRINKS',
+    description: 'Fizzy drinks, ice cubes, and cozy cafes!',
     clues: [
       "It has 7 letters and starts with 'N'.",
-      "Iconic Italian cocktail crafted with equal parts Gin, Campari, and Sweet Vermouth.",
-      "Traditionally served on the rocks with an orange peel garnish."
+      "Famous cold drink mixed with Gin and citrus peel.",
+      "Served over big cold ice cubes."
     ],
     preloadedWords: {
       'NEGRONI': 100,
@@ -112,15 +112,15 @@ export const DEFAULT_THEMES: Theme[] = [
   },
   {
     id: 'flora-fauna',
-    name: 'Flora & Fauna',
+    name: 'Animals & Nature',
     icon: '🌿',
     targetWord: 'CHAMELEON',
-    badge: 'BIOLOGY',
-    description: 'Vibrant wildlife, exotic reptiles, and natural camouflage',
+    badge: 'NATURE',
+    description: 'Cute animals, green trees, and jungle camouflage!',
     clues: [
       "It has 9 letters and starts with 'C'.",
-      "A highly specialized lizard renowned for changing skin color to blend into foliage.",
-      "Features independently mobile eyes and a rapid projectile tongue to catch prey."
+      "A cool lizard that changes colors to hide!",
+      "Has long sticky tongue to catch bugs."
     ],
     preloadedWords: {
       'CHAMELEON': 100,
@@ -145,15 +145,15 @@ export const DEFAULT_THEMES: Theme[] = [
   },
   {
     id: 'cyberpunk-neon',
-    name: 'Cyberpunk Neon',
+    name: 'Robots & Tech',
     icon: '⚡',
     targetWord: 'NEURAL',
-    badge: 'FUTURISM',
-    description: 'Synthetic intelligence, cyberware implants, and neon dystopias',
+    badge: 'ROBOTS',
+    description: 'Cool gadgets, computers, and glowing neon circuits!',
     clues: [
       "It has 6 letters and starts with 'N'.",
-      "Pertaining to nerves or brain-machine interfaces that connect wetware to networks.",
-      "Key component in synthetic AI networks and bio-cybernetic implants."
+      "Brain connection that helps computers think!",
+      "Used in smart robots and brain chips."
     ],
     preloadedWords: {
       'NEURAL': 100,
@@ -178,15 +178,15 @@ export const DEFAULT_THEMES: Theme[] = [
   },
   {
     id: 'arena-sports',
-    name: 'Arena Sports',
+    name: 'Sports & Games',
     icon: '⚽',
     targetWord: 'MARATHON',
-    badge: 'ATHLETICS',
-    description: 'Championship endurance, stadium energy, and athletic milestones',
+    badge: 'SPORTS',
+    description: 'Running, big stadiums, and winning trophies!',
     clues: [
       "It has 8 letters and starts with 'M'.",
-      "Legendary long-distance running race covering an official distance of 42.195 km.",
-      "Tests physical stamina, pacing strategy, and athletic grit."
+      "Super long running race across the city!",
+      "Tests how fast and far runners can go."
     ],
     preloadedWords: {
       'MARATHON': 100,
@@ -210,15 +210,15 @@ export const DEFAULT_THEMES: Theme[] = [
   },
   {
     id: 'cinema-noir',
-    name: 'Cinema Noir',
+    name: 'Movies & Cinema',
     icon: '🎬',
     targetWord: 'SCREENPLAY',
-    badge: 'HOLLYWOOD',
-    description: 'Silver screen narratives, dramatic scripts, and cinematic magic',
+    badge: 'MOVIES',
+    description: 'Movie stars, popcorn, and big screen stories!',
     clues: [
       "It has 10 letters and starts with 'S'.",
-      "Written manuscript outlining dialogue, scenes, and camera directions for a film.",
-      "The blueprint created by screenwriters before principal movie photography begins."
+      "The written story book that actors read for movies!",
+      "Tells directors what scenes and words to film."
     ],
     preloadedWords: {
       'SCREENPLAY': 100,
@@ -271,7 +271,7 @@ export function getTierBgGradient(tier: ScoreTier): string {
 }
 
 /**
- * Calculates semantic similarity score (0 to 100) using multi-factor vector approximation.
+ * Calculates similarity score (0 to 100) between user guess and target word.
  */
 export function calculateSemanticScore(guessRaw: string, theme: Theme): number {
   const guess = guessRaw.trim().toUpperCase();
@@ -284,56 +284,49 @@ export function calculateSemanticScore(guessRaw: string, theme: Theme): number {
     return theme.preloadedWords[guess];
   }
 
-  // 2. Multi-Factor Vector Similarity Calculation
+  // 2. Multi-Factor Similarity Calculation
   let score = 0;
 
-  // A. Levenshtein edit distance ratio (0 to 35 points)
   const dist = levenshteinDistance(guess, target);
   const maxLen = Math.max(guess.length, target.length);
   const editSimilarity = Math.max(0, (1 - dist / maxLen));
   score += editSimilarity * 35;
 
-  // B. N-gram / character set overlap (0 to 30 points)
   const charOverlap = getCharOverlapRatio(guess, target);
   score += charOverlap * 30;
 
-  // C. Length match ratio (0 to 15 points)
   const lenRatio = Math.min(guess.length, target.length) / Math.max(guess.length, target.length);
   score += lenRatio * 15;
 
-  // D. Lexical Stem & Cluster Heuristic Match (0 to 10 points)
   if (guess[0] === target[0]) score += 5;
   if (guess[guess.length - 1] === target[target.length - 1]) score += 3;
 
-  // E. Deterministic Hash Variance (0 to 10 points)
   const hashBonus = (hashString(guess + target) % 10);
   score += hashBonus;
 
-  // Cap score to 97% max so only exact target reaches 100%
   const finalScore = Math.min(97, Math.max(5, Math.round(score)));
   return finalScore;
 }
 
 /**
- * Generates custom theme with secure target word extraction
+ * Generates custom theme for any user input
  */
 export function createCustomTheme(topicName: string): Theme {
   const cleanName = topicName.trim();
   const wordsInTopic = cleanName.split(/\s+/).map(w => w.toUpperCase().replace(/[^A-Z]/g, '')).filter(Boolean);
   
-  // Choose key word from topic or default to prominent thematic target
-  const targetWord = wordsInTopic[0] || 'NEXUS';
+  const targetWord = wordsInTopic[0] || 'MAGIC';
 
   return {
     id: `custom-${cleanName.toLowerCase().replace(/\s+/g, '-')}`,
     name: cleanName,
-    icon: '⚡',
+    icon: '✨',
     badge: 'CUSTOM',
     targetWord: targetWord,
-    description: `Dynamic custom realm centered on ${cleanName}`,
+    description: `Fun secret word game about ${cleanName}!`,
     clues: [
-      `The target word has ${targetWord.length} letters and starts with '${targetWord[0]}'.`,
-      `Directly related to the central domain of ${cleanName}.`,
+      `The secret word has ${targetWord.length} letters and starts with '${targetWord[0]}'.`,
+      `It is related to ${cleanName}!`,
       `Ends with the letter '${targetWord[targetWord.length - 1]}'.`
     ],
     preloadedWords: {

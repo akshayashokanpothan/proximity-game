@@ -34,7 +34,6 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
     }
   }, [isOpen]);
 
-  // 3-Stage non-skippable ad timer logic
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (adStage === 'ad1') {
@@ -84,20 +83,20 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
     switch (adStage) {
       case 'ad1':
         return {
-          title: '⚡ CRED MAX PAY',
-          desc: 'Zero-fee instant settlement and premium rewards engine.',
+          title: '⚡ HELPER VIDEO 1/3',
+          desc: 'Here comes video 1 of 3 to show the secret word!',
           badge: 'STAGE 1/3'
         };
       case 'ad2':
         return {
-          title: '💎 NEXUS SYNAPSE AI',
-          desc: 'High-speed cognitive embeddings for vector distance analysis.',
+          title: '💎 HELPER VIDEO 2/3',
+          desc: 'Here comes video 2 of 3! Almost there!',
           badge: 'STAGE 2/3'
         };
       case 'ad3':
         return {
-          title: '🌐 QUANTUM CLOUD EDGE',
-          desc: 'Sub-millisecond global neural network compute infrastructure.',
+          title: '🌐 HELPER VIDEO 3/3',
+          desc: 'Final video 3 of 3! The word will show next!',
           badge: 'STAGE 3/3'
         };
       default:
@@ -109,7 +108,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md select-none">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -122,7 +121,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
             <div className="flex items-center gap-2 text-rose-500">
               <Eye className="w-5 h-5 animate-pulse" />
               <span className="font-mono text-xs font-bold uppercase tracking-wider">
-                GATED WORD REVEAL GATE
+                GIVE UP & SHOW SECRET WORD
               </span>
             </div>
 
@@ -146,11 +145,11 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
                 <Lock className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-bold text-white mb-1.5 font-sans">
-                FORFEIT & REVEAL SECRET WORD?
+                WANT TO SEE THE SECRET WORD?
               </h3>
               <p className="text-xs text-cred-muted max-w-xs mx-auto mb-5 leading-relaxed">
-                You have completed <strong className="text-white font-mono">{totalGuesses} guesses</strong> in <strong className="text-white">{themeName}</strong>. 
-                Watch a 3-stage non-skippable sponsor ad sequence to unlock the secret target word.
+                You made <strong className="text-white font-mono">{totalGuesses} guesses</strong> in <strong className="text-white">{themeName}</strong>. 
+                Watch 3 quick videos to see the secret word!
               </p>
 
               <button
@@ -158,7 +157,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
                 className="w-full py-4 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-mono text-xs sm:text-sm font-extrabold tracking-wider shadow-[0_0_25px_rgba(255,51,102,0.4)] active:scale-95 transition-all flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <Unlock className="w-4 h-4" />
-                <span>START 3-STAGE REVEAL AD GATE</span>
+                <span>WATCH 3 QUICK VIDEOS TO SEE WORD</span>
               </button>
             </div>
           )}
@@ -168,15 +167,15 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
               {/* Progress Indicator Bar */}
               <div className="flex items-center justify-center gap-2 mb-4">
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold ${adStage === 'ad1' ? 'bg-[#FF3366] text-white' : 'bg-white/10 text-white/50'}`}>
-                  AD 1/3
+                  VIDEO 1/3
                 </span>
                 <span className="text-white/20">➔</span>
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold ${adStage === 'ad2' ? 'bg-[#FF3366] text-white' : 'bg-white/10 text-white/50'}`}>
-                  AD 2/3
+                  VIDEO 2/3
                 </span>
                 <span className="text-white/20">➔</span>
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold ${adStage === 'ad3' ? 'bg-[#FF3366] text-white' : 'bg-white/10 text-white/50'}`}>
-                  AD 3/3
+                  VIDEO 3/3
                 </span>
               </div>
 
@@ -184,7 +183,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
               <div className="glass-panel p-5 rounded-2xl border border-rose-500/30 mb-4 relative overflow-hidden bg-[#0D0D12]">
                 <div className="flex items-center justify-between text-[11px] font-mono text-cred-subtle mb-3">
                   <span className="flex items-center gap-1 text-rose-400">
-                    <ShieldCheck className="w-3.5 h-3.5" /> NON-SKIPPABLE SPONSOR
+                    <ShieldCheck className="w-3.5 h-3.5" /> HELPER VIDEO
                   </span>
                   <span className="text-rose-400 font-bold">{sponsor.badge}</span>
                 </div>
@@ -228,7 +227,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
                 </div>
 
                 <span className="text-[10px] font-mono text-rose-400 font-semibold block">
-                  LOCK ACTIVE — {countdown}s REMAINING IN STAGE
+                  PLEASE WAIT — {countdown}s REMAINING IN THIS VIDEO
                 </span>
               </div>
             </div>
@@ -237,7 +236,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
           {adStage === 'revealed' && (
             <div className="py-3 text-center">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/40 text-rose-500 text-xs font-mono font-bold mb-3">
-                <AlertTriangle className="w-3.5 h-3.5" /> AD SEQUENCE COMPLETED
+                <AlertTriangle className="w-3.5 h-3.5" /> VIDEOS COMPLETED!
               </div>
 
               {/* Neon Decrypt Target Word Display */}
@@ -247,7 +246,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
                 className="glass-panel p-5 rounded-2xl border border-rose-500/40 bg-[#0B0B0F] mb-4 text-center"
               >
                 <span className="text-[10px] font-mono text-cred-subtle uppercase tracking-widest block mb-1">
-                  SECRET TARGET WORD UNVEILED:
+                  THE SECRET WORD WAS:
                 </span>
                 <div className="text-3xl font-mono font-extrabold text-[#FF3366] tracking-widest uppercase drop-shadow-[0_0_15px_rgba(255,51,102,0.6)]">
                   {targetWord}
@@ -262,7 +261,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
                 </div>
                 <div className="glass-panel p-2.5 rounded-xl border border-white/10">
                   <div className="text-sm font-bold text-[#FFB800]">{highestScore}%</div>
-                  <div className="text-[9px] text-cred-subtle">PEAK HEAT</div>
+                  <div className="text-[9px] text-cred-subtle">BEST HEAT</div>
                 </div>
                 <div className="glass-panel p-2.5 rounded-xl border border-white/10">
                   <div className="text-sm font-bold text-white">{formatTime(timeTakenSeconds)}</div>
@@ -278,7 +277,7 @@ export const RevealAdModal: React.FC<RevealAdModalProps> = ({
                 className="w-full py-3.5 rounded-xl bg-cred-card border border-white/15 text-xs font-mono font-bold text-white active:scale-95 transition-all flex items-center justify-center gap-2 min-h-[44px]"
               >
                 <RotateCcw className="w-4 h-4 text-cred-muted" />
-                <span>START NEW MATCH</span>
+                <span>PLAY AGAIN!</span>
               </button>
             </div>
           )}

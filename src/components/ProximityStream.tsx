@@ -19,10 +19,10 @@ export const ProximityStream: React.FC<ProximityStreamProps> = ({ guesses }) => 
           <Layers className="w-6 h-6" />
         </div>
         <h4 className="text-sm font-bold text-white font-sans uppercase tracking-wider mb-1">
-          PROXIMITY STREAM EMPTY
+          NO GUESSES YET!
         </h4>
         <p className="text-xs text-cred-muted font-sans max-w-xs mx-auto">
-          Submit your first guess to observe real-time vector re-ordering in the heat stream.
+          Type your first word above to see if you are 🥶 Cold or 🔥 Super Hot!
         </p>
       </div>
     );
@@ -34,11 +34,11 @@ export const ProximityStream: React.FC<ProximityStreamProps> = ({ guesses }) => 
         <div className="flex items-center gap-2">
           <Flame className="w-4 h-4 text-[#00FF66]" />
           <span className="text-xs font-mono font-bold tracking-widest text-white uppercase">
-            HEAT STREAM ({sortedGuesses.length})
+            YOUR GUESSES ({sortedGuesses.length})
           </span>
         </div>
         <span className="text-[10px] font-mono text-cred-subtle">
-          SORTED BY PROXIMITY
+          WARMEST ON TOP
         </span>
       </div>
 

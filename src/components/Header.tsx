@@ -24,15 +24,15 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-lg sm:text-xl font-extrabold tracking-widest text-white font-sans">
-              ORBIT<span className="text-[#00FF66]">.ENGINE</span>
+            <h1 className="text-lg sm:text-xl font-extrabold tracking-wide text-white font-sans">
+              SECRET <span className="text-[#00FF66]">WORD GAME</span>
             </h1>
             <span className="px-2 py-0.5 text-[9px] font-mono tracking-wider bg-white/5 text-[#00FF66] border border-[#00FF66]/30 rounded-full font-semibold">
               v1.0
             </span>
           </div>
           <p className="text-[10px] sm:text-[11px] text-cred-muted font-mono font-semibold tracking-wider">
-            SEMANTIC GRAVITY // VECTOR SOLVER
+            HOT & COLD WORD FINDER 🎯
           </p>
         </div>
       </div>
@@ -58,8 +58,8 @@ export const Header: React.FC<HeaderProps> = ({
             onToggleSound();
           }}
           className="touch-target w-10 h-10 rounded-xl bg-cred-card border border-white/10 text-cred-muted hover:text-white active:scale-95 transition-all flex items-center justify-center shrink-0"
-          title={soundEnabled ? 'Mute Audio' : 'Unmute Audio'}
-          aria-label={soundEnabled ? 'Mute Audio' : 'Unmute Audio'}
+          title={soundEnabled ? 'Mute Sound' : 'Unmute Sound'}
+          aria-label={soundEnabled ? 'Mute Sound' : 'Unmute Sound'}
         >
           {soundEnabled ? (
             <Volume2 className="w-5 h-5 text-[#00FF66]" />
